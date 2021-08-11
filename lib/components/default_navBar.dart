@@ -3,7 +3,7 @@ import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/screens/profile/profile.dart';
-import 'package:rongsokin_user/screens/transaction/transaction.dart';
+import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 
 class DefaultNavBar extends StatelessWidget {
   const DefaultNavBar({
@@ -51,7 +51,7 @@ class DefaultNavBar extends StatelessWidget {
                       : inActiveIconColor),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return Transaction();
+                  return SelectItemScreen();
                 }));
               },
             ),
