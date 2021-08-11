@@ -28,13 +28,18 @@ class DatabaseService {
   }
 
   Future createTransaction() async{
-    db.collection("transactions").doc().collection("detailBarang").doc("elektronik").set({
+    db.collection("transactions").doc().set({
+      'userId' : '012983021',
       'listBarang' : [
         {
-          'namaBarang' : 'Handphone Bekas'
+          'kategori' : 'elektronik',
+          'namaBarang' : 'Monitor Bekas',
+          'berat' : 2,
         },
         {
-          'namaBarang' : 'Monitor Bekas'
+          'kategori' : 'elektronik',
+          'namaBarang' : 'Handphone Bekas',
+          'berat' : 2,
         }
       ]
     });
