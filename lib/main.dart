@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rongsokin_user/screens/home/home.dart';
+import 'package:rongsokin_user/screens/wrapper.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat',
       ),
-      home: Home(),
+      home: Wrapper(),
     );
   }
 }
