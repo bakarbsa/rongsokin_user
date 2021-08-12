@@ -27,21 +27,12 @@ class DatabaseService {
     return await db.collection("users").doc(id).get();
   }
 
-  Future createTransaction() async{
+  Future createTransaction(List<Map<String, String>> listBarang) async{
     db.collection("transactions").doc().set({
-      'userId' : '012983021',
-      'listBarang' : [
-        {
-          'kategori' : 'elektronik',
-          'namaBarang' : 'Monitor Bekas',
-          'berat' : 2,
-        },
-        {
-          'kategori' : 'elektronik',
-          'namaBarang' : 'Handphone Bekas',
-          'berat' : 2,
-        }
-      ]
+      'userId' : uid,
+      'userPengepulId' : null,
+      'diambil' : false,
+      'listBarang' : listBarang,
     });
     // db.collection("transactions").doc().set(
     //   {
