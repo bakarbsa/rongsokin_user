@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,9 +7,9 @@ import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/models/items_model.dart';
 import 'package:intl/intl.dart';
 
-// List<ItemsModel> itemList = [];
 int total = 0;
 List<Map<String, dynamic>> listBarang = [];
+
 class DetailItem extends StatefulWidget {
   final List<String> selectedItems;
   const DetailItem({Key? key, required this.selectedItems}) : super(key: key);
@@ -19,14 +18,11 @@ class DetailItem extends StatefulWidget {
   _DetailItemState createState() => _DetailItemState();
 }
 
-class _DetailItemState extends State<DetailItem> {  
-  
-  int itemIteration = 0;
-
+class _DetailItemState extends State<DetailItem> {
   void addData(String category, String itemName) {
     listBarang.add(
       {
-        'kategori': category, 
+        'kategori': category,
         'namaBarang': itemName,
       },
     );
@@ -36,22 +32,67 @@ class _DetailItemState extends State<DetailItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(backgroundColor: kPrimaryColor),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: InkWell(
+          onTap: () {},
+          child: Container(
+            height: 60,
+            width: 300,
+            decoration: BoxDecoration(
+              color: Color(0xFFFCA311),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Cari Pengepul',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 35, right: 35, top: 35),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Tentukan detail barang',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
+                    onPressed: () {
+                      widget.selectedItems.clear();
+                      listBarang.clear();
+                      total = 0;
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Tentukan detail barang',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
               Container(
-                height: 200,
+                padding: EdgeInsets.only(top: 20),
+                height: 500,
                 child: ListView.builder(
                   itemCount: widget.selectedItems.length,
                   itemBuilder: (context, index) {
@@ -62,12 +103,17 @@ class _DetailItemState extends State<DetailItem> {
                   },
                 ),
               ),
-              ElevatedButton(
-                child: Text('upload'),
-                onPressed: () {
-                  print(listBarang.length);
-                  // addData(category, itemName)
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total :',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               )
             ],
           ),
@@ -80,7 +126,8 @@ class _DetailItemState extends State<DetailItem> {
 class ItemContainer extends StatefulWidget {
   final String itemName;
   final int index;
-  const ItemContainer({Key? key, required this.itemName, required this.index}) : super(key: key);
+  const ItemContainer({Key? key, required this.itemName, required this.index})
+      : super(key: key);
 
   @override
   _ItemContainerState createState() => _ItemContainerState();
@@ -97,79 +144,117 @@ class _ItemContainerState extends State<ItemContainer> {
 
   @override
   void initState() {
-    listBarang.add({});
+    price = setPrice(widget.itemName);
+    listBarang.add({
+      'kategori': getCategory(widget.itemName),
+      'namaBarang': widget.itemName,
+      'deskripsi': description,
+      'harga': price,
+      'berat': weight,
+      'fotoBarang': imageFile
+    });
     super.initState();
   }
 
   Future pickImage() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
 
     setState(() {
-      if(pickedFile != null) {
+      if (pickedFile != null) {
         imageFile = File(pickedFile.path);
-      } 
+      }
     });
     return imageFile;
   }
 
+  String unit = '';
+
   @override
   Widget build(BuildContext context) {
     price = setPrice(widget.itemName);
+    unit = '';
+    //Set Satuan
+    if (getCategory(widget.itemName) == 'Elektronik')
+      unit = '';
+    else
+      unit = ' Kg';
+
     return Column(
       children: [
-        Row(children: [
-          Text(
-            widget.itemName,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          SizedBox(width: 5),
-          Text('(' + getCategory(widget.itemName) + ')'),
-        ]),
+        Row(
+          children: [
+            Text(
+              widget.itemName,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(width: 5),
+            Text('(' + getCategory(widget.itemName) + ')'),
+          ],
+        ),
+        SizedBox(height: 10),
         Row(
           children: [
             Container(
-              width: 100,
+              width: 250,
               child: TextFormField(
+                maxLines: 4,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
+                  hintText: 'Deskripsi barang',
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10)),
+                ),
                 onChanged: (value) {
                   description = value;
                   listBarang[widget.index] = {
-                    'kategori' : getCategory(widget.itemName),
-                    'namaBarang' : widget.itemName,
-                    'deskripsi' : description,
-                    'harga' : price*weight,
-                    'berat' : weight,
-                    'fotoBarang' : imageFile
+                    'kategori': getCategory(widget.itemName),
+                    'namaBarang': widget.itemName,
+                    'deskripsi': description,
+                    'harga': price * weight,
+                    'berat': weight,
+                    'fotoBarang': imageFile
                   };
                 },
               ),
             ),
+            SizedBox(width: 10),
             Container(
-              width: 140,
+              height: 95,
+              width: 100,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    '${currency.format(price * weight)}',
-                    style: TextStyle(                   
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 5),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Rp',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        currency.format(price * weight).substring(2),
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         onTap: () {
                           setState(() {
                             weight <= 1 ? 1 : weight--;
                             listBarang[widget.index] = {
-                              'kategori' : getCategory(widget.itemName),
-                              'namaBarang' : widget.itemName,
-                              'deskripsi' : description,
-                              'harga' : price*weight,
-                              'berat' : weight,
-                              'fotoBarang' : imageFile
+                              'kategori': getCategory(widget.itemName),
+                              'namaBarang': widget.itemName,
+                              'deskripsi': description,
+                              'harga': price * weight,
+                              'berat': weight,
+                              'fotoBarang': imageFile
                             };
-                            total -= price*weight;
                           });
                         },
                         child: Container(
@@ -183,9 +268,8 @@ class _ItemContainerState extends State<ItemContainer> {
                         ),
                       ),
                       Text(
-                        weight.toString() + ' Kg',
+                        weight.toString() + unit,
                         style: TextStyle(
-                          
                           fontSize: 15,
                         ),
                       ),
@@ -194,14 +278,13 @@ class _ItemContainerState extends State<ItemContainer> {
                           setState(() {
                             weight++;
                             listBarang[widget.index] = {
-                              'kategori' : getCategory(widget.itemName),
-                              'namaBarang' : widget.itemName,
-                              'deskripsi' : description,
-                              'harga' : price*weight,
-                              'berat' : weight,
-                              'fotoBarang' : imageFile
+                              'kategori': getCategory(widget.itemName),
+                              'namaBarang': widget.itemName,
+                              'deskripsi': description,
+                              'harga': price * weight,
+                              'berat': weight,
+                              'fotoBarang': imageFile
                             };
-                            total += price*weight;
                           });
                         },
                         child: Container(
@@ -215,30 +298,42 @@ class _ItemContainerState extends State<ItemContainer> {
                         ),
                       )
                     ],
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      listBarang[widget.index] = {
+                        'kategori': getCategory(widget.itemName),
+                        'namaBarang': widget.itemName,
+                        'deskripsi': description,
+                        'harga': price * weight,
+                        'berat': weight,
+                        'fotoBarang': await pickImage()
+                      };
+                    },
+                    child: Container(
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFCA311),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Upload Gambar',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
                   )
                 ],
               ),
             ),
-            InkWell(
-              onTap: () async{
-                listBarang[widget.index] = {
-                  'kategori' : getCategory(widget.itemName),
-                  'namaBarang' : widget.itemName,
-                  'deskripsi' : description,
-                  'harga' : price*weight,
-                  'berat' : weight,
-                  'fotoBarang' : await pickImage()
-                };
-              },
-              child: Container(
-                width: 60,
-                height: 30,
-                color: Colors.red,
-                child: Text('upload gambar'),
-              ),
-            )
           ],
-        )
+        ),
+        SizedBox(height: 15),
       ],
     );
   }
