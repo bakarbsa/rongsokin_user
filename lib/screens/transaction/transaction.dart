@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:rongsokin_user/services/auth.dart';
+// import 'package:rongsokin_user/services/auth.dart';
 
 class Transaction extends StatefulWidget {
   const Transaction({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class Transaction extends StatefulWidget {
 }
 
 class _TransactionState extends State<Transaction> {
-  final AuthService _auth = AuthService();
+  // final AuthService _auth = AuthService();
   List<Map<String, String>> listBarang = [];
   // final listBarang = Map<String,String>();
   // Map<String, String> map = new HashMap<String, String>();
@@ -74,7 +74,7 @@ class _TransactionState extends State<Transaction> {
           child: ElevatedButton(
             child: Text('upload'),
             onPressed: () async {
-              await _auth.createTransaction(listBarang);
+              // await _auth.createTransaction(listBarang);
             },
           ),
         ),

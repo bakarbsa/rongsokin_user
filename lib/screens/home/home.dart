@@ -2,13 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rongsokin_user/components/default_appBar.dart';
-import 'package:rongsokin_user/components/default_article_page.dart';
-import 'package:rongsokin_user/components/default_article_page.dart';
 import 'package:rongsokin_user/components/default_content_page.dart';
 import 'package:rongsokin_user/components/default_navBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
-import 'package:rongsokin_user/models/article_models.dart';
+import 'package:rongsokin_user/screens/home/list_articles.dart';
 import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -287,18 +285,7 @@ class Home extends StatelessWidget {
                   children: [
                     ListImage(
                       assetImage: 'assets/images/cara_penggunaan_aplikasi.png',
-                      content: Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 200,
-                              height: 200,
-                              child: Image.asset('assets/images/cara_penggunaan_aplikasi.png'),
-                            ),
-                            Text('Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
-                          ],
-                        ),
-                      ),  
+                      content: kenaliLebihDekat()
                     ),
                     SizedBox(width: 10),
                     ListImage(
@@ -371,52 +358,80 @@ class Home extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  ...List.generate(
-                    listArticles.length,
-                    (index) {
-                      return ListArticle(article: listArticles[index], id: index,);
-                    },
-                  ),
-                  // ListArticle(
-                  //   assetImage: 'assets/images/article_1.png',
-                  //   titleArticle: 'Membenahi Tata Kelola \nSampah Nasional',
-                  //   content: Container(
-                  //     child: Column(
-                  //       children: [
-                  //         Image.asset('assets/images/article_1.png'),
-                  //         Text('Sunt magna Lorem laborum cillum incididunt eu.')
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // ListArticle(
-                  //   assetImage: 'assets/images/article_1.png',
-                  //   titleArticle: 'Peluang Bisnis Baru: Limbah Elektronik \nIndonesia Bernilai Rp 200 Triliun',
-                  //   content: Container(
-                  //     child: Column(
-                  //       children: [
-                  //         Image.asset('assets/images/article_1.png'),
-                  //         Text('Sunt magna Lorem laborum cillum incididunt eu.')
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // ListArticle(
-                  //   assetImage: 'assets/images/article_1.png',
-                  //   titleArticle: 'Penambangan Limbah Elektronik Bisa Menjadi \nBisnis Besar Dan Baik Untuk Planet Ini',
-                  //   content: Container(
-                  //     child: Column(
-                  //       children: [
-                  //         Image.asset('assets/images/article_1.png'),
-                  //         Text('Sunt magna Lorem laborum cillum incididunt eu.')
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
+              child: ListArticles()
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container kenaliLebihDekat() {
+    return Container(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CircleAvatar(
+              backgroundImage: ExactAssetImage('assets/images/muhammad_adib_afkari.png'),
+              radius: 80,    
+            ),
+            Column(
+              children: [
+                Text('Muhammad adib Afkari', style: kSubHeaderText,),
+                Text('Chief Executife Officer', style: kParagraphText,),
+              ],
+            ),
+            SizedBox(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: ExactAssetImage('assets/images/annisyah_amelia.png'),
+                      radius: 70,
+                    ),
+                    Text('Annisyah Amelia F.', style: kSubHeaderText,),
+                    Text('Art and Design Director', style: kParagraphText,)
+                  ],
+                ),    
+                Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: ExactAssetImage('assets/images/cellerina_yollanda.png'),
+                      radius: 70,
+                    ),
+                    Text('Cellerina Yolanda E.', style: kSubHeaderText,),
+                    Text('Marketing and Finance\nDirector', style: kParagraphText,textAlign: TextAlign.center,)
+                  ],
+                )            
+              ],
+            ),
+            SizedBox(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: ExactAssetImage('assets/images/shafira_cahyasakti.png'),
+                      radius: 70,
+                    ),
+                    Text('Shafira Cahyasakti', style: kSubHeaderText,),
+                    Text('Research and development\ndirector', style: kParagraphText,textAlign: TextAlign.center,),
+                  ],
+                ),
+                Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: ExactAssetImage('assets/images/farid_cenreng.png'),
+                      radius: 70,
+                    ),
+                    Text('Farid Cenreng', style: kSubHeaderText,),
+                    Text('Technical and\nMaintenance Director', style: kParagraphText,textAlign: TextAlign.center,),
+                  ],
+                ),
+              ],
             )
           ],
         ),
@@ -453,74 +468,6 @@ class ListImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-    );
-  }
-}
-
-class ListArticle extends StatelessWidget {
-  const ListArticle({
-    Key? key,
-    required this.article,
-    required this.id
-    // required this.assetImage,
-    // required this.titleArticle,
-    // required this.content
-  }) : super(key: key);
-
-  final Article article;
-  final int id;
-  // final String assetImage;
-  // final String titleArticle;
-  // final Container content;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_){
-          return DefaultArticlePage(article: article, id: id,);
-        }));
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        height: 180,
-        child: Card(
-          clipBehavior: Clip.none,
-          elevation: 0,
-          child: Container(
-            width: double.maxFinite,
-            height: 220 * 0.60,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  // Hero(
-                  //   tag: id.toString(),
-                  //   child: Image.network(
-                  //     article.photoArticle,
-                  //     fit: BoxFit.cover,
-                  //     alignment: Alignment.topCenter,
-                  //   ),
-                  // ),
-                  Image.asset(
-                    article.photoArticle,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    bottom: 15,
-                    left: 15,
-                    child: Text(
-                      article.titleArticle,
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      )
     );
   }
 }

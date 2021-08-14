@@ -34,6 +34,7 @@ class ShowAlertDialog extends StatelessWidget {
                 ),
                 Text(
                   alertMessage,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold
                   ),
