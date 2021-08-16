@@ -68,7 +68,7 @@ class _DetailItemState extends State<DetailItem> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: InkWell(
           onTap: () async{
-            dynamic result = await _auth.addTransactionPhoto(listBarang);
+            dynamic result = await _auth.addRequest(listBarang);
             if (result == null) {
               print('error');
             } else {
@@ -212,7 +212,7 @@ class _ItemContainerState extends State<ItemContainer> {
 
   Future pickImage() async {
     final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+        await ImagePicker().getImage(source: ImageSource.camera);
 
     setState(() {
       if (pickedFile != null) {
