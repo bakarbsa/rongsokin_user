@@ -7,6 +7,7 @@ import 'package:rongsokin_user/components/default_navBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
 import 'package:rongsokin_user/screens/home/list_articles.dart';
+import 'package:rongsokin_user/screens/transaction/loading.dart';
 import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,135 +17,165 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //get data from firebase
-    final user = FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser : null;
+    final user = FirebaseAuth.instance.currentUser != null
+        ? FirebaseAuth.instance.currentUser
+        : null;
     var db = FirebaseFirestore.instance;
     final dataProfileUser =
         db.collection("users").doc(user?.uid ?? null).snapshots();
-        
+
     return Scaffold(
       appBar: DefaultAppBar(backgroundColor: kPrimaryColor),
       bottomNavigationBar: DefaultNavBar(selectedMenu: MenuState.home),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            user == null ? Container() : StreamBuilder(
-              stream: dataProfileUser,
-              builder: (context, snapshot) {
-                if(snapshot.hasData) {
-                  return Container(
-                    height: 160,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(25),
-                              bottomRight: Radius.circular(25),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+            user == null
+                ? Container()
+                : StreamBuilder(
+                    stream: dataProfileUser,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: 160,
+                          width: MediaQuery.of(context).size.width,
+                          child: Stack(
                             children: [
-                              Text(
-                                ' Selamat Datang, \n ' + (snapshot.data as dynamic)["username"],
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(20),
+                              Container(
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  color: kPrimaryColor,
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(25),
+                                    bottomRight: Radius.circular(25),
                                   ),
                                 ),
-                                elevation: 10,
-                                child: Container(
-                                  height: 90,
-                                  width: MediaQuery.of(context).size.width - 70,
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.account_circle_outlined,
-                                              color: Colors.black,
-                                              size: 70,
-                                            ),
-                                            SizedBox(width: 5),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Rongsok Poinmu',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.account_balance_wallet,
-                                                      color: kPrimaryColor,
-                                                      size: 28,
-                                                    ),
-                                                    SizedBox(width: 5),
-                                                    Text(
-                                                      (snapshot.data as dynamic)["poin"].toString(),
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 25,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      ' Selamat Datang, \n ' +
+                                          (snapshot.data
+                                              as dynamic)["username"],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 3),
-                                          child: InkWell(
-                                            onTap: () {},
-                                            child: Image.asset(
-                                                'assets/images/withdraw.png'),
+                                      ),
+                                      elevation: 10,
+                                      child: Container(
+                                        height: 90,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                70,
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .account_circle_outlined,
+                                                    color: Colors.black,
+                                                    size: 70,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Rongsok Poinmu',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .account_balance_wallet,
+                                                            color:
+                                                                kPrimaryColor,
+                                                            size: 28,
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text(
+                                                            (snapshot.data
+                                                                        as dynamic)[
+                                                                    "poin"]
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 25,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 3),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    Loading()));
+                                                  },
+                                                  child: Image.asset(
+                                                      'assets/images/withdraw.png'),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ),
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-                return Center(
-                  child: Text('Loading...'),
-                );
-              },
-            ),
+                        );
+                      }
+                      return Center(
+                        child: Text('Loading...'),
+                      );
+                    },
+                  ),
             SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 35),
@@ -284,9 +315,9 @@ class Home extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   children: [
                     ListImage(
-                      assetImage: 'assets/images/cara_penggunaan_aplikasi.png',
-                      content: kenaliLebihDekat()
-                    ),
+                        assetImage:
+                            'assets/images/cara_penggunaan_aplikasi.png',
+                        content: kenaliLebihDekat()),
                     SizedBox(width: 10),
                     ListImage(
                       assetImage: 'assets/images/cerita_kami.png',
@@ -296,12 +327,14 @@ class Home extends StatelessWidget {
                             Container(
                               width: 200,
                               height: 200,
-                              child: Image.asset('assets/images/cerita_kami.png'),
+                              child:
+                                  Image.asset('assets/images/cerita_kami.png'),
                             ),
-                            Text('Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
+                            Text(
+                                'Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
                           ],
                         ),
-                      ),  
+                      ),
                     ),
                     SizedBox(width: 10),
                     ListImage(
@@ -312,12 +345,14 @@ class Home extends StatelessWidget {
                             Container(
                               width: 200,
                               height: 200,
-                              child: Image.asset('assets/images/jenis_sampah.png'),
+                              child:
+                                  Image.asset('assets/images/jenis_sampah.png'),
                             ),
-                            Text('Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
+                            Text(
+                                'Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
                           ],
                         ),
-                      ),  
+                      ),
                     ),
                   ],
                 ),
@@ -356,10 +391,7 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: ListArticles()
-            )
+            Padding(padding: EdgeInsets.all(20), child: ListArticles())
           ],
         ),
       ),
@@ -372,63 +404,105 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             CircleAvatar(
-              backgroundImage: ExactAssetImage('assets/images/muhammad_adib_afkari.png'),
-              radius: 80,    
+              backgroundImage:
+                  ExactAssetImage('assets/images/muhammad_adib_afkari.png'),
+              radius: 80,
             ),
             Column(
               children: [
-                Text('Muhammad adib Afkari', style: kSubHeaderText,),
-                Text('Chief Executife Officer', style: kParagraphText,),
+                Text(
+                  'Muhammad adib Afkari',
+                  style: kSubHeaderText,
+                ),
+                Text(
+                  'Chief Executife Officer',
+                  style: kParagraphText,
+                ),
               ],
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
                   children: [
                     CircleAvatar(
-                      backgroundImage: ExactAssetImage('assets/images/annisyah_amelia.png'),
+                      backgroundImage:
+                          ExactAssetImage('assets/images/annisyah_amelia.png'),
                       radius: 70,
                     ),
-                    Text('Annisyah Amelia F.', style: kSubHeaderText,),
-                    Text('Art and Design Director', style: kParagraphText,)
-                  ],
-                ),    
-                Column(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: ExactAssetImage('assets/images/cellerina_yollanda.png'),
-                      radius: 70,
+                    Text(
+                      'Annisyah Amelia F.',
+                      style: kSubHeaderText,
                     ),
-                    Text('Cellerina Yolanda E.', style: kSubHeaderText,),
-                    Text('Marketing and Finance\nDirector', style: kParagraphText,textAlign: TextAlign.center,)
-                  ],
-                )            
-              ],
-            ),
-            SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: ExactAssetImage('assets/images/shafira_cahyasakti.png'),
-                      radius: 70,
-                    ),
-                    Text('Shafira Cahyasakti', style: kSubHeaderText,),
-                    Text('Research and development\ndirector', style: kParagraphText,textAlign: TextAlign.center,),
+                    Text(
+                      'Art and Design Director',
+                      style: kParagraphText,
+                    )
                   ],
                 ),
                 Column(
                   children: [
                     CircleAvatar(
-                      backgroundImage: ExactAssetImage('assets/images/farid_cenreng.png'),
+                      backgroundImage: ExactAssetImage(
+                          'assets/images/cellerina_yollanda.png'),
                       radius: 70,
                     ),
-                    Text('Farid Cenreng', style: kSubHeaderText,),
-                    Text('Technical and\nMaintenance Director', style: kParagraphText,textAlign: TextAlign.center,),
+                    Text(
+                      'Cellerina Yolanda E.',
+                      style: kSubHeaderText,
+                    ),
+                    Text(
+                      'Marketing and Finance\nDirector',
+                      style: kParagraphText,
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: ExactAssetImage(
+                          'assets/images/shafira_cahyasakti.png'),
+                      radius: 70,
+                    ),
+                    Text(
+                      'Shafira Cahyasakti',
+                      style: kSubHeaderText,
+                    ),
+                    Text(
+                      'Research and development\ndirector',
+                      style: kParagraphText,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage:
+                          ExactAssetImage('assets/images/farid_cenreng.png'),
+                      radius: 70,
+                    ),
+                    Text(
+                      'Farid Cenreng',
+                      style: kSubHeaderText,
+                    ),
+                    Text(
+                      'Technical and\nMaintenance Director',
+                      style: kParagraphText,
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ],
@@ -441,11 +515,8 @@ class Home extends StatelessWidget {
 }
 
 class ListImage extends StatelessWidget {
-  const ListImage({
-    Key? key,
-    required this.assetImage,
-    required this.content
-  }) : super(key: key);
+  const ListImage({Key? key, required this.assetImage, required this.content})
+      : super(key: key);
 
   final String assetImage;
   final Container content;
@@ -454,16 +525,14 @@ class ListImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_){
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return DefaultContentPage(content: content);
         }));
       },
       child: Container(
         width: 160,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(assetImage)
-          ),
+          image: DecorationImage(image: AssetImage(assetImage)),
           color: Colors.blue[100],
           borderRadius: BorderRadius.circular(20),
         ),

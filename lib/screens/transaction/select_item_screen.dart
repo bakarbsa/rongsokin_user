@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rongsokin_user/components/default_alert_dialog.dart';
 import 'package:rongsokin_user/components/default_appBar.dart';
 import 'package:rongsokin_user/constant.dart';
+import 'package:rongsokin_user/models/items_model.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/screens/transaction/detail_item.dart';
 
@@ -11,14 +12,27 @@ List<bool> _isExpanded = [false, false, false, false, false, false];
 Map<String, bool> _isChecked = {
   'Handphone': false,
   'Monitor LED': false,
+  'CPU': false,
+  'Printer': false,
   'Kulkas': false,
   'Televisi Tabung': false,
   'Televisi LED': false,
-  'Baterai': false,
-  'Botol Mineral': false,
+  'Aki': false,
+  'AC': false,
+  'Motherboard': false,
+  'Laptop': false,
+  'Mesin Cuci': false,
+  'Setrika': false,
+  'Kipas Angin': false,
+  'Pompa Air': false,
+  'Botol Mineral 600 ml': false,
+  'Botol Mineral 1.5 L': false,
+  'Botol Plastik Berwarna': false,
+  'Gelas Plastik': false,
   'Jerigen': false,
   'Wadah Parfum': false,
   'Galon': false,
+  'Pipa Paralon': false,
   'Karton': false,
   'Kardus': false,
   'Buku': false,
@@ -28,6 +42,10 @@ Map<String, bool> _isChecked = {
   'Botol Kaca': false,
   'Kaleng': false,
   'Peralatan Masak': false,
+  'Tembaga': false,
+  'Kuningan': false,
+  'Aluminium': false,
+  'Radiator': false,
   'Kain Perca': false,
   'Sepatu': false,
   'Tas': false,
@@ -43,75 +61,76 @@ class SelectItemScreen extends StatefulWidget {
 class _SelectItemScreenState extends State<SelectItemScreen> {
   var expandedIcon;
   List<String> selectedItems = [];
-  Future<bool> _onBackPressed() async{
+  Future<bool> _onBackPressed() async {
     return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ShowAlertDialog(
-          context: context, 
-          alertMessage: "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang", 
-          press: () async {
-            for (String key in _isChecked.keys) {
-              _isChecked[key] = false;
-            }
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-              return Home();
-            }));
-          }
-        );
-      }
-    ) ??
+            context: context,
+            builder: (BuildContext context) {
+              return ShowAlertDialog(
+                  context: context,
+                  alertMessage:
+                      "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
+                  press: () async {
+                    for (String key in _isChecked.keys) {
+                      _isChecked[key] = false;
+                    }
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (_) {
+                      return Home();
+                    }));
+                  });
+            }) ??
         false;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(backgroundColor: kPrimaryColor),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: InkWell(
-          onTap: () {
-            _isChecked.forEach((key, value) {
-              if (value) selectedItems.add(key);
-            });
-            if (selectedItems.length != 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailItem(
-                          selectedItems: this.selectedItems,
-                        )));
-            }
-          },
-          child: Container(
-            height: 60,
-            width: 300,
-            decoration: BoxDecoration(
-              color: Color(0xFFFCA311),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Lanjut',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.symmetric(horizontal: 20),
+      //   child: InkWell(
+      //     onTap: () {
+      //       _isChecked.forEach((key, value) {
+      //         if (value) selectedItems.add(key);
+      //       });
+      //       if (selectedItems.length != 0) {
+      //         Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (context) => DetailItem(
+      //                       selectedItems: this.selectedItems,
+      //                     )));
+      //       }
+      //     },
+      //     child: Container(
+      //       height: 60,
+      //       width: 300,
+      //       decoration: BoxDecoration(
+      //         color: kPrimaryColor,
+      //         borderRadius: BorderRadius.circular(10),
+      //       ),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           Text(
+      //             'Lanjut',
+      //             style: TextStyle(
+      //               color: Colors.white,
+      //               fontSize: 20,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
       body: WillPopScope(
         onWillPop: _onBackPressed,
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 35, right: 35, top: 35, bottom: 100),
+              const EdgeInsets.only(left: 35, right: 35, top: 35, bottom: 20),
           child: Column(
             children: [
               Row(
@@ -123,6 +142,9 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                     onPressed: () {
                       for (String key in _isChecked.keys) {
                         _isChecked[key] = false;
+                      }
+                      for (int i = 0; i < _isExpanded.length; i++) {
+                        _isExpanded[i] = false;
                       }
                       Navigator.pop(context);
                     },
@@ -157,9 +179,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                           child: Container(
                             height: 40,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -180,24 +204,10 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                       ),
                       // List Elektrik Category
                       SizedBox(height: 10),
-                      _isExpanded[0]
-                          ? CheckBoxCategory(categoryKey: 'Handphone')
-                          : SizedBox.shrink(),
-                      _isExpanded[0]
-                          ? CheckBoxCategory(categoryKey: 'Monitor LED')
-                          : SizedBox.shrink(),
-                      _isExpanded[0]
-                          ? CheckBoxCategory(categoryKey: 'Kulkas')
-                          : SizedBox.shrink(),
-                      _isExpanded[0]
-                          ? CheckBoxCategory(categoryKey: 'Televisi Tabung')
-                          : SizedBox.shrink(),
-                      _isExpanded[0]
-                          ? CheckBoxCategory(categoryKey: 'Televisi LED')
-                          : SizedBox.shrink(),
-                      _isExpanded[0]
-                          ? CheckBoxCategory(categoryKey: 'Baterai')
-                          : SizedBox.shrink(),
+                      for (int i = 0; i < elektronikList.length; i++)
+                        _isExpanded[0]
+                            ? CheckBoxCategory(categoryKey: elektronikList[i])
+                            : SizedBox.shrink(),
                       SizedBox(height: 10),
 
                       // DROPDOWN PLASTIK
@@ -212,9 +222,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                           child: Container(
                             height: 40,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -234,19 +246,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      _isExpanded[1]
-                          ? CheckBoxCategory(categoryKey: 'Botol Mineral')
-                          : SizedBox.shrink(),
-                      _isExpanded[1]
-                          ? CheckBoxCategory(categoryKey: 'Jerigen')
-                          : SizedBox.shrink(),
-                      _isExpanded[1]
-                          ? CheckBoxCategory(categoryKey: 'Wadah Parfum')
-                          : SizedBox.shrink(),
-                      _isExpanded[1]
-                          ? CheckBoxCategory(categoryKey: 'Galon')
-                          : SizedBox.shrink(),
-                      SizedBox(height: 20),
+                      for (int i = 0; i < plastikList.length; i++)
+                        _isExpanded[1]
+                            ? CheckBoxCategory(categoryKey: plastikList[i])
+                            : SizedBox.shrink(),
+                      SizedBox(height: 10),
 
                       // DROPDOWN KERTAS
                       Card(
@@ -260,9 +264,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                           child: Container(
                             height: 40,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -282,19 +288,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      _isExpanded[2]
-                          ? CheckBoxCategory(categoryKey: 'Karton')
-                          : SizedBox.shrink(),
-                      _isExpanded[2]
-                          ? CheckBoxCategory(categoryKey: 'Kardus')
-                          : SizedBox.shrink(),
-                      _isExpanded[2]
-                          ? CheckBoxCategory(categoryKey: 'Buku')
-                          : SizedBox.shrink(),
-                      _isExpanded[2]
-                          ? CheckBoxCategory(categoryKey: 'Kanvas')
-                          : SizedBox.shrink(),
-                      SizedBox(height: 20),
+                      for (int i = 0; i < kertasList.length; i++)
+                        _isExpanded[2]
+                            ? CheckBoxCategory(categoryKey: kertasList[i])
+                            : SizedBox.shrink(),
+                      SizedBox(height: 10),
 
                       // DROPDOWN KACA
                       Card(
@@ -308,9 +306,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                           child: Container(
                             height: 40,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -330,16 +330,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      _isExpanded[3]
-                          ? CheckBoxCategory(categoryKey: 'Cermin')
-                          : SizedBox.shrink(),
-                      _isExpanded[3]
-                          ? CheckBoxCategory(categoryKey: 'Kaca Bening')
-                          : SizedBox.shrink(),
-                      _isExpanded[3]
-                          ? CheckBoxCategory(categoryKey: 'Botol Kaca')
-                          : SizedBox.shrink(),
-                      SizedBox(height: 20),
+                      for (int i = 0; i < kacaList.length; i++)
+                        _isExpanded[3]
+                            ? CheckBoxCategory(categoryKey: kacaList[i])
+                            : SizedBox.shrink(),
+                      SizedBox(height: 10),
 
                       // DROPDOWN LOGAM
                       Card(
@@ -353,9 +348,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                           child: Container(
                             height: 40,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -375,13 +372,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      _isExpanded[4]
-                          ? CheckBoxCategory(categoryKey: 'Kaleng')
-                          : SizedBox.shrink(),
-                      _isExpanded[4]
-                          ? CheckBoxCategory(categoryKey: 'Peralatan Masak')
-                          : SizedBox.shrink(),
-                      SizedBox(height: 20),
+                      for (int i = 0; i < logamList.length; i++)
+                        _isExpanded[4]
+                            ? CheckBoxCategory(categoryKey: logamList[i])
+                            : SizedBox.shrink(),
+                      SizedBox(height: 10),
 
                       // DROPDOWN KAIN
                       Card(
@@ -395,9 +390,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                           child: Container(
                             height: 40,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -417,20 +414,55 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      _isExpanded[5]
-                          ? CheckBoxCategory(categoryKey: 'Kain Perca')
-                          : SizedBox.shrink(),
-                      _isExpanded[5]
-                          ? CheckBoxCategory(categoryKey: 'Sepatu')
-                          : SizedBox.shrink(),
-                      _isExpanded[5]
-                          ? CheckBoxCategory(categoryKey: 'Tas')
-                          : SizedBox.shrink(),
-                      SizedBox(height: 20),
+                      for (int i = 0; i < kainList.length; i++)
+                        _isExpanded[5]
+                            ? CheckBoxCategory(categoryKey: kainList[i])
+                            : SizedBox.shrink(),
+                      SizedBox(height: 10),
                     ],
                   ),
                 ),
               ),
+              Spacer(),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    _isChecked.forEach((key, value) {
+                      if (value) selectedItems.add(key);
+                    });
+                    if (selectedItems.length != 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailItem(
+                                    selectedItems: this.selectedItems,
+                                  )));
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    height: 60,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Lanjut',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
