@@ -4,18 +4,19 @@ import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
 
 class DefaultContentPage extends StatelessWidget {
-  const DefaultContentPage({ 
-    Key? key,
-    required this.content
-  }) : super(key: key);
+  const DefaultContentPage(
+      {Key? key, required this.content, required this.title})
+      : super(key: key);
 
-  final Container content;
+  final Widget content;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Artikel'),
+        toolbarHeight: 80,
+        title: Text(title),
         backgroundColor: kPrimaryColor,
       ),
       body: SingleChildScrollView(

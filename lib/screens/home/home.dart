@@ -6,7 +6,9 @@ import 'package:rongsokin_user/components/default_content_page.dart';
 import 'package:rongsokin_user/components/default_navBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
+import 'package:rongsokin_user/screens/home/jenis_sampah.dart';
 import 'package:rongsokin_user/screens/home/list_articles.dart';
+import 'package:rongsokin_user/screens/transaction/confirmation.dart';
 import 'package:rongsokin_user/screens/transaction/loading.dart';
 import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -151,9 +153,8 @@ class Home extends StatelessWidget {
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    Loading()));
+                                                            builder: (context) =>
+                                                                Confirmation()));
                                                   },
                                                   child: Image.asset(
                                                       'assets/images/withdraw.png'),
@@ -315,20 +316,16 @@ class Home extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   children: [
                     ListImage(
-                        assetImage:
-                            'assets/images/cara_penggunaan_aplikasi.png',
-                        content: kenaliLebihDekat()),
-                    SizedBox(width: 10),
-                    ListImage(
-                      assetImage: 'assets/images/cerita_kami.png',
+                      assetImage: 'assets/images/cara_penggunaan_aplikasi.png',
+                      title: 'Cara Penggunaan Aplikasi',
                       content: Container(
                         child: Column(
                           children: [
                             Container(
                               width: 200,
                               height: 200,
-                              child:
-                                  Image.asset('assets/images/cerita_kami.png'),
+                              child: Image.asset(
+                                  'assets/images/cara_penggunaan_aplikasi.png'),
                             ),
                             Text(
                                 'Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
@@ -338,19 +335,25 @@ class Home extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     ListImage(
-                      assetImage: 'assets/images/jenis_sampah.png',
-                      content: Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 200,
-                              height: 200,
-                              child:
-                                  Image.asset('assets/images/jenis_sampah.png'),
-                            ),
-                            Text(
-                                'Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
-                          ],
+                        assetImage: 'assets/images/cerita_kami.png',
+                        title: 'Cerita Kami',
+                        content: kenaliLebihDekat()),
+                    SizedBox(width: 10),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) {
+                          return JenisSampah();
+                        }));
+                      },
+                      child: Container(
+                        width: 160,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/jenis_sampah.png')),
+                          color: Colors.blue[100],
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                     ),
@@ -391,7 +394,9 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(padding: EdgeInsets.all(20), child: ListArticles())
+            Padding(
+                padding: EdgeInsets.fromLTRB(30, 5, 30, 20),
+                child: ListArticles())
           ],
         ),
       ),
@@ -515,18 +520,23 @@ class Home extends StatelessWidget {
 }
 
 class ListImage extends StatelessWidget {
-  const ListImage({Key? key, required this.assetImage, required this.content})
+  const ListImage(
+      {Key? key,
+      required this.assetImage,
+      required this.content,
+      required this.title})
       : super(key: key);
 
   final String assetImage;
-  final Container content;
+  final Widget content;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return DefaultContentPage(content: content);
+          return DefaultContentPage(content: content, title: title);
         }));
       },
       child: Container(

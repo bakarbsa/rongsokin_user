@@ -6,11 +6,8 @@ import 'package:rongsokin_user/models/article_models.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DefaultArticlePage extends StatelessWidget {
-  const DefaultArticlePage({ 
-    Key? key,
-    required this.article,
-    required this.id
-  }) : super(key: key);
+  const DefaultArticlePage({Key? key, required this.article, required this.id})
+      : super(key: key);
 
   final Article article;
   final int id;
@@ -18,15 +15,14 @@ class DefaultArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: [
-            ArticleImage(article: article, id: id),
-          ],
-        ),
-      )
-    );
+        body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: ListView(
+        children: [
+          ArticleImage(article: article, id: id),
+        ],
+      ),
+    ));
   }
 }
 
@@ -61,104 +57,95 @@ class _ArticleImageState extends State<ArticleImage> {
                 },
                 child: SizedBox(
                   width: 20,
-                  child: Image.asset(
-                    "assets/images/back_icon.png",
-                    fit: BoxFit.fill,
-                  ),
+                  child: Icon(Icons.arrow_back),
                 ),
               ),
-              SizedBox(width: 20,),
-              Text('Artikel Hari Ini', style: kHeaderText,)
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'Artikel Hari Ini',
+                style: kHeaderText,
+              )
             ],
           ),
         ),
         SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0),
-            child: Stack(
-              children: [
-                Hero(
-                  tag: widget.id.toString(),
-                  child: Image.asset(widget.article.photoArticle),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter, 
-                        colors: <Color>[
-                          Colors.black.withOpacity(0.35),
-                          Colors.transparent,
-                        ], // red to yellow
-                        tileMode: TileMode.repeated,
-                      )
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: Stack(
+                children: [
+                  Hero(
+                    tag: widget.id.toString(),
+                    child: Image.asset(widget.article.photoArticle),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: <Color>[
+                              Colors.black.withOpacity(0.35),
+                              Colors.transparent,
+                            ], // red to yellow
+                            tileMode: TileMode.repeated,
+                          )),
                     ),
                   ),
-                ),
-              ],
-            )
-          ),
+                ],
+              )),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            widget.article.titleArticle, 
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 19
-            ),
+            widget.article.titleArticle,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Penulis : ' + widget.article.writerArticle,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: Colors.grey
-              ),
+              style: TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
             ),
             Text(
               widget.article.dateArticle,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: Colors.grey
-              ),
+              style: TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
             )
           ],
         ),
-        SizedBox(height: 10,),
-        RichText(
-          textAlign: TextAlign.justify,
-          text: TextSpan(
-            style: TextStyle(
-              color: Colors.black,
-              wordSpacing: 6,
-              fontSize: 16
-            ),
-            text: widget.article.contentArticle
-          ) 
+        SizedBox(
+          height: 10,
         ),
-        SizedBox(height: 10,),
+        RichText(
+            textAlign: TextAlign.justify,
+            text: TextSpan(
+                style: TextStyle(
+                    color: Colors.black, wordSpacing: 6, fontSize: 16),
+                text: widget.article.contentArticle)),
+        SizedBox(
+          height: 10,
+        ),
         InkWell(
-          onTap: () {
-            launch(widget.article.linkArticle);
-          },
-          child: Text(
-            'Baca Selengkapnya : ' + widget.article.linkArticle,
-            style: TextStyle(
-              color: Colors.blue
-            ),
-          )
-        )
+            onTap: () {
+              launch(widget.article.linkArticle);
+            },
+            child: Text(
+              'Baca Selengkapnya : ' + widget.article.linkArticle,
+              style: TextStyle(color: Colors.blue),
+            ))
       ],
     );
   }

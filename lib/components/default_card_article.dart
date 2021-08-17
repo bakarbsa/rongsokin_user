@@ -3,11 +3,8 @@ import 'package:rongsokin_user/components/default_article_page.dart';
 import 'package:rongsokin_user/models/article_models.dart';
 
 class DefaultCardArticle extends StatelessWidget {
-  const DefaultCardArticle({ 
-    Key? key,
-    required this.article,
-    required this.id 
-  }) : super(key: key);
+  const DefaultCardArticle({Key? key, required this.article, required this.id})
+      : super(key: key);
 
   final Article article;
   final int id;
@@ -16,52 +13,54 @@ class DefaultCardArticle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_){
-            return DefaultArticlePage(article: article, id: id,);
-          }));
-        },
-        child: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-          height: 180,
-          child: Card(
-            clipBehavior: Clip.none,
-            elevation: 0,
-            child: Container(
-              width: double.maxFinite,
-              height: 220 * 0.60,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Hero(
-                      tag: id.toString(),
-                      child: Image.asset(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+              return DefaultArticlePage(
+                article: article,
+                id: id,
+              );
+            }));
+          },
+          child: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            height: 180,
+            child: Card(
+              clipBehavior: Clip.none,
+              elevation: 0,
+              child: Container(
+                width: double.maxFinite,
+                height: 220 * 0.60,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Hero(
+                        tag: id.toString(),
+                        child: Image.asset(
+                          article.photoArticle,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                      Image.asset(
                         article.photoArticle,
                         fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
                       ),
-                    ),
-                    Image.asset(
-                      article.photoArticle,
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                      bottom: 15,
-                      left: 15,
-                      child: Text(
-                        article.titleArticle,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      Positioned(
+                        bottom: 15,
+                        left: 15,
+                        child: Text(
+                          article.titleArticle,
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        )
-      ),
+          )),
     );
   }
 }

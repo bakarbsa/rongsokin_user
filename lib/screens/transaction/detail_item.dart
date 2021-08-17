@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rongsokin_user/components/default_alert_dialog.dart';
-import 'package:rongsokin_user/components/default_appBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/models/items_model.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +35,7 @@ class DetailItem extends StatefulWidget {
 class _DetailItemState extends State<DetailItem> {
   num total = 0;
   bool coba = false;
+  String address = '';
   final AuthService _auth = AuthService();
 
   Future<bool> _onBackPressed() async {
@@ -62,79 +62,141 @@ class _DetailItemState extends State<DetailItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(backgroundColor: kPrimaryColor),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.symmetric(horizontal: 20),
-      //   child: InkWell(
-      //     onTap: () async {
-      //       dynamic result = await _auth.addRequest(listBarang);
-      //       if (result == null) {
-      //         print('error');
-      //       } else {
-      //         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      //           return Loading();
-      //         }));
-      //       }
-      //     },
-      //     child: Container(
-      //       height: 60,
-      //       width: 300,
-      //       decoration: BoxDecoration(
-      //         color: kPrimaryColor,
-      //         borderRadius: BorderRadius.circular(10),
-      //       ),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.center,
-      //         children: [
-      //           Text(
-      //             'Cari Pengepul',
-      //             style: TextStyle(
-      //               color: Colors.white,
-      //               fontSize: 20,
-      //               fontWeight: FontWeight.w600,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+        backgroundColor: kPrimaryColor,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+                onPressed: () {
+                  widget.selectedItems.clear();
+                  listBarang.clear();
+                  total = 0;
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Tentukan detail barang',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total :',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '${currency.format(total)}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: InkWell(
+                onTap: () async {
+                  bool checkNullPrice = false;
+                  for (int i = 0; i < widget.selectedItems.length; i++) {
+                    if (listBarang[i]['harga'] == null ||
+                        listBarang[i]['harga'] == 0) {
+                      checkNullPrice = true;
+                    }
+                  }
+                  if (checkNullPrice == false) {
+                    dynamic result = await _auth.addRequest(listBarang);
+                    if (result == null) {
+                      print('error');
+                    } else {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) {
+                        return Loading();
+                      }));
+                    }
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  height: 60,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Cari Pengepul',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: WillPopScope(
         onWillPop: _onBackPressed,
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 20),
+              const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    onPressed: () {
-                      widget.selectedItems.clear();
-                      listBarang.clear();
-                      total = 0;
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back),
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Tentukan detail barang',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+              SizedBox(height: 10),
+              Text(
+                'Alamat Lengkap',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.65,
-                padding: EdgeInsets.only(top: 20),
+              SizedBox(height: 10),
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.location_on, color: kPrimaryColor),
+                  contentPadding: EdgeInsets.all(10),
+                  hintText: 'Masukkan alamat lengkapmu',
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                onChanged: (value) {
+                  address = value;
+                },
+              ),
+              SizedBox(height: 20),
+              Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: widget.selectedItems.length,
@@ -149,69 +211,6 @@ class _DetailItemState extends State<DetailItem> {
                         });
                   },
                 ),
-              ),
-              SizedBox(height: 10),
-              Spacer(),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total :',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '${currency.format(total)}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Center(
-                    child: InkWell(
-                      onTap: () async {
-                        dynamic result = await _auth.addRequest(listBarang);
-                        if (result == null) {
-                          print('error');
-                        } else {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (_) {
-                            return Loading();
-                          }));
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        height: 60,
-                        width: 300,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Cari Pengepul',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -244,6 +243,8 @@ class _ItemContainerState extends State<ItemContainer>
   int price = 1;
   int weight = 0;
   File? imageFile;
+  String imageText = 'Ambil Foto';
+  Color imageColor = kSecondaryColor;
 
   @override
   bool get wantKeepAlive => true;
@@ -256,11 +257,14 @@ class _ItemContainerState extends State<ItemContainer>
   }
 
   Future pickImage() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
 
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
+        imageColor = Color(0xFF1CC900);
+        imageText = 'Sudah Upload';
       }
     });
     return imageFile;
@@ -417,12 +421,12 @@ class _ItemContainerState extends State<ItemContainer>
                       child: Container(
                         height: 30,
                         decoration: BoxDecoration(
-                          color: Color(0xFFFCA311),
+                          color: imageColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
                           child: Text(
-                            'Upload Gambar',
+                            imageText,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,

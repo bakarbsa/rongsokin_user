@@ -21,56 +21,56 @@ class DefaultNavBar extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.8),
-            spreadRadius: 8,
-            blurRadius: 10,
-            offset: Offset(0, 5)),
+              color: Colors.grey.withOpacity(0.8),
+              spreadRadius: 8,
+              blurRadius: 10,
+              offset: Offset(0, 5)),
         ],
       ),
       child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(
-                Icons.home,
-                color: MenuState.home == selectedMenu
-                    ? kPrimaryColor
-                    : inActiveIconColor,
-              ),
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-                  return Home();
-                }));
-              },
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.home,
+              color: MenuState.home == selectedMenu
+                  ? kSecondaryColor
+                  : inActiveIconColor,
             ),
-            IconButton(
-              icon: Icon(Icons.receipt_long,
-                  color: MenuState.transaction == selectedMenu
-                      ? kPrimaryColor
-                      : inActiveIconColor),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return SelectItemScreen();
-                }));
-              },
+            onPressed: () {
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (_) {
+                return Home();
+              }));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.receipt_long,
+                color: MenuState.transaction == selectedMenu
+                    ? kSecondaryColor
+                    : inActiveIconColor),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return SelectItemScreen();
+              }));
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.person,
+              color: MenuState.profile == selectedMenu
+                  ? kSecondaryColor
+                  : inActiveIconColor,
             ),
-            IconButton(
-              icon: Icon(
-                Icons.person,
-                color: MenuState.profile == selectedMenu
-                    ? kPrimaryColor
-                    : inActiveIconColor,
-              ),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return Profile();
-                }));
-              },
-            ),
-          ],
-        )
-      ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return Profile();
+              }));
+            },
+          ),
+        ],
+      )),
     );
   }
 }

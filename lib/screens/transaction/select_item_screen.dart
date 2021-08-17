@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rongsokin_user/components/default_alert_dialog.dart';
-import 'package:rongsokin_user/components/default_appBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/models/items_model.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
@@ -85,385 +84,331 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(backgroundColor: kPrimaryColor),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.symmetric(horizontal: 20),
-      //   child: InkWell(
-      //     onTap: () {
-      //       _isChecked.forEach((key, value) {
-      //         if (value) selectedItems.add(key);
-      //       });
-      //       if (selectedItems.length != 0) {
-      //         Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //                 builder: (context) => DetailItem(
-      //                       selectedItems: this.selectedItems,
-      //                     )));
-      //       }
-      //     },
-      //     child: Container(
-      //       height: 60,
-      //       width: 300,
-      //       decoration: BoxDecoration(
-      //         color: kPrimaryColor,
-      //         borderRadius: BorderRadius.circular(10),
-      //       ),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.center,
-      //         children: [
-      //           Text(
-      //             'Lanjut',
-      //             style: TextStyle(
-      //               color: Colors.white,
-      //               fontSize: 20,
-      //               fontWeight: FontWeight.w600,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
+        backgroundColor: kPrimaryColor,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+                onPressed: () {
+                  for (String key in _isChecked.keys) {
+                    _isChecked[key] = false;
+                  }
+                  for (int i = 0; i < _isExpanded.length; i++) {
+                    _isExpanded[i] = false;
+                  }
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Pilih barang yang akan dijual',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 65, right: 65, bottom: 20),
+        child: InkWell(
+          onTap: () {
+            _isChecked.forEach((key, value) {
+              if (value) selectedItems.add(key);
+            });
+            if (selectedItems.length != 0) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailItem(
+                            selectedItems: this.selectedItems,
+                          )));
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            height: 60,
+            decoration: BoxDecoration(
+              color: kPrimaryColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Lanjut',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: WillPopScope(
         onWillPop: _onBackPressed,
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 35, right: 35, top: 35, bottom: 20),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    onPressed: () {
-                      for (String key in _isChecked.keys) {
-                        _isChecked[key] = false;
-                      }
-                      for (int i = 0; i < _isExpanded.length; i++) {
-                        _isExpanded[i] = false;
-                      }
-                      Navigator.pop(context);
+              const EdgeInsets.only(left: 35, right: 35, top: 25, bottom: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // DROPDOWN ELEKTRONIK
+                Card(
+                  elevation: 6,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded[0] = !_isExpanded[0];
+                      });
                     },
-                    icon: Icon(Icons.arrow_back),
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Pilih barang yang akan dijual',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Container(
-                height: MediaQuery.of(context).size.height - 300,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // DROPDOWN ELEKTRONIK
-                      Card(
-                        elevation: 6,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[0] = !_isExpanded[0];
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Elektronik',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Icon(_isExpanded[0]
-                                      ? Icons.expand_more
-                                      : Icons.navigate_next),
-                                ],
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Elektronik',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
+                            Icon(_isExpanded[0]
+                                ? Icons.expand_more
+                                : Icons.navigate_next),
+                          ],
                         ),
                       ),
-                      // List Elektrik Category
-                      SizedBox(height: 10),
-                      for (int i = 0; i < elektronikList.length; i++)
-                        _isExpanded[0]
-                            ? CheckBoxCategory(categoryKey: elektronikList[i])
-                            : SizedBox.shrink(),
-                      SizedBox(height: 10),
-
-                      // DROPDOWN PLASTIK
-                      Card(
-                        elevation: 6,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[1] = !_isExpanded[1];
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Plastik',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Icon(_isExpanded[1]
-                                      ? Icons.expand_more
-                                      : Icons.navigate_next),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      for (int i = 0; i < plastikList.length; i++)
-                        _isExpanded[1]
-                            ? CheckBoxCategory(categoryKey: plastikList[i])
-                            : SizedBox.shrink(),
-                      SizedBox(height: 10),
-
-                      // DROPDOWN KERTAS
-                      Card(
-                        elevation: 6,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[2] = !_isExpanded[2];
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Kertas',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Icon(_isExpanded[2]
-                                      ? Icons.expand_more
-                                      : Icons.navigate_next),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      for (int i = 0; i < kertasList.length; i++)
-                        _isExpanded[2]
-                            ? CheckBoxCategory(categoryKey: kertasList[i])
-                            : SizedBox.shrink(),
-                      SizedBox(height: 10),
-
-                      // DROPDOWN KACA
-                      Card(
-                        elevation: 6,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[3] = !_isExpanded[3];
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Kaca',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Icon(_isExpanded[3]
-                                      ? Icons.expand_more
-                                      : Icons.navigate_next),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      for (int i = 0; i < kacaList.length; i++)
-                        _isExpanded[3]
-                            ? CheckBoxCategory(categoryKey: kacaList[i])
-                            : SizedBox.shrink(),
-                      SizedBox(height: 10),
-
-                      // DROPDOWN LOGAM
-                      Card(
-                        elevation: 6,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[4] = !_isExpanded[4];
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Logam',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Icon(_isExpanded[4]
-                                      ? Icons.expand_more
-                                      : Icons.navigate_next),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      for (int i = 0; i < logamList.length; i++)
-                        _isExpanded[4]
-                            ? CheckBoxCategory(categoryKey: logamList[i])
-                            : SizedBox.shrink(),
-                      SizedBox(height: 10),
-
-                      // DROPDOWN KAIN
-                      Card(
-                        elevation: 6,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded[5] = !_isExpanded[5];
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Kain',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Icon(_isExpanded[5]
-                                      ? Icons.expand_more
-                                      : Icons.navigate_next),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      for (int i = 0; i < kainList.length; i++)
-                        _isExpanded[5]
-                            ? CheckBoxCategory(categoryKey: kainList[i])
-                            : SizedBox.shrink(),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ),
-              Spacer(),
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    _isChecked.forEach((key, value) {
-                      if (value) selectedItems.add(key);
-                    });
-                    if (selectedItems.length != 0) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailItem(
-                                    selectedItems: this.selectedItems,
-                                  )));
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 60,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      color: kPrimaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Lanjut',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              )
-            ],
+                // List Elektrik Category
+                SizedBox(height: 10),
+                for (int i = 0; i < elektronikList.length; i++)
+                  _isExpanded[0]
+                      ? CheckBoxCategory(categoryKey: elektronikList[i])
+                      : SizedBox.shrink(),
+                SizedBox(height: 10),
+
+                // DROPDOWN PLASTIK
+                Card(
+                  elevation: 6,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded[1] = !_isExpanded[1];
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Plastik',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(_isExpanded[1]
+                                ? Icons.expand_more
+                                : Icons.navigate_next),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                for (int i = 0; i < plastikList.length; i++)
+                  _isExpanded[1]
+                      ? CheckBoxCategory(categoryKey: plastikList[i])
+                      : SizedBox.shrink(),
+                SizedBox(height: 10),
+
+                // DROPDOWN KERTAS
+                Card(
+                  elevation: 6,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded[2] = !_isExpanded[2];
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Kertas',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(_isExpanded[2]
+                                ? Icons.expand_more
+                                : Icons.navigate_next),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                for (int i = 0; i < kertasList.length; i++)
+                  _isExpanded[2]
+                      ? CheckBoxCategory(categoryKey: kertasList[i])
+                      : SizedBox.shrink(),
+                SizedBox(height: 10),
+
+                // DROPDOWN KACA
+                Card(
+                  elevation: 6,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded[3] = !_isExpanded[3];
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Kaca',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(_isExpanded[3]
+                                ? Icons.expand_more
+                                : Icons.navigate_next),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                for (int i = 0; i < kacaList.length; i++)
+                  _isExpanded[3]
+                      ? CheckBoxCategory(categoryKey: kacaList[i])
+                      : SizedBox.shrink(),
+                SizedBox(height: 10),
+
+                // DROPDOWN LOGAM
+                Card(
+                  elevation: 6,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded[4] = !_isExpanded[4];
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Logam',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(_isExpanded[4]
+                                ? Icons.expand_more
+                                : Icons.navigate_next),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                for (int i = 0; i < logamList.length; i++)
+                  _isExpanded[4]
+                      ? CheckBoxCategory(categoryKey: logamList[i])
+                      : SizedBox.shrink(),
+                SizedBox(height: 10),
+
+                // DROPDOWN KAIN
+                Card(
+                  elevation: 6,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded[5] = !_isExpanded[5];
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Kain',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Icon(_isExpanded[5]
+                                ? Icons.expand_more
+                                : Icons.navigate_next),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                for (int i = 0; i < kainList.length; i++)
+                  _isExpanded[5]
+                      ? CheckBoxCategory(categoryKey: kainList[i])
+                      : SizedBox.shrink(),
+                SizedBox(height: 10),
+              ],
+            ),
           ),
         ),
       ),
