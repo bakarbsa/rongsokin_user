@@ -16,7 +16,7 @@ class DefaultArticlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
       child: ListView(
         children: [
           ArticleImage(article: article, id: id),
@@ -101,33 +101,35 @@ class _ArticleImageState extends State<ArticleImage> {
               )),
         ),
         SizedBox(
-          height: 10,
+          height: 20,
         ),
         Align(
           alignment: Alignment.topLeft,
           child: Text(
             widget.article.titleArticle,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 15,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Penulis : ' + widget.article.writerArticle,
-              style: TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
+              style: TextStyle(
+                  fontWeight: FontWeight.w400, color: Colors.grey[600]),
             ),
             Text(
               widget.article.dateArticle,
-              style: TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
+              style: TextStyle(
+                  fontWeight: FontWeight.w400, color: Colors.grey[600]),
             )
           ],
         ),
         SizedBox(
-          height: 10,
+          height: 15,
         ),
         RichText(
             textAlign: TextAlign.justify,

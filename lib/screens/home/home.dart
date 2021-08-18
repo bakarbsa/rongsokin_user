@@ -9,7 +9,6 @@ import 'package:rongsokin_user/enums.dart';
 import 'package:rongsokin_user/screens/home/jenis_sampah.dart';
 import 'package:rongsokin_user/screens/home/list_articles.dart';
 import 'package:rongsokin_user/screens/transaction/confirmation.dart';
-import 'package:rongsokin_user/screens/transaction/loading.dart';
 import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
