@@ -40,23 +40,23 @@ class _DetailItemState extends State<DetailItem> {
 
   Future<bool> _onBackPressed() async {
     return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ShowAlertDialog(
             context: context,
-            builder: (BuildContext context) {
-              return ShowAlertDialog(
-                  context: context,
-                  alertMessage:
-                      "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
-                  press: () async {
-                    widget.selectedItems.clear();
-                    listBarang.clear();
-                    total = 0;
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (_) {
-                      return Home();
-                    }));
-                  });
-            }) ??
-        false;
+            alertMessage:
+                "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
+            press: () async {
+              widget.selectedItems.clear();
+              listBarang.clear();
+              total = 0;
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (_) {
+                return Home();
+              }));
+            });
+      }) ??
+    false;
   }
 
   @override
@@ -130,13 +130,14 @@ class _DetailItemState extends State<DetailItem> {
                     }
                   }
                   if (checkNullPrice == false) {
-                    dynamic result = await _auth.addRequest(listBarang);
+                    print(total);
+                    dynamic result = await _auth.createRequest(listBarang, address, total);
                     if (result == null) {
                       print('error');
                     } else {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (_) {
-                        return Loading();
+                        return Loading(documentId: result,);
                       }));
                     }
                   }
@@ -202,13 +203,13 @@ class _DetailItemState extends State<DetailItem> {
                   itemCount: widget.selectedItems.length,
                   itemBuilder: (context, index) {
                     return ItemContainer(
-                        itemName: widget.selectedItems[index],
-                        index: index,
-                        total: (num tot) {
-                          setState(() {
-                            total = tot;
-                          });
+                      itemName: widget.selectedItems[index],
+                      index: index,
+                      total: (num tot) {
+                        setState(() {
+                          total = tot;
                         });
+                      });
                   },
                 ),
               ),
@@ -317,6 +318,7 @@ class _ItemContainerState extends State<ItemContainer>
                       'namaBarang': widget.itemName,
                       'deskripsi': description,
                       'harga': price * weight,
+                      'hargaPerItem' : price,
                       'berat': weight,
                       'fotoBarang': imageFile
                     };
@@ -358,6 +360,7 @@ class _ItemContainerState extends State<ItemContainer>
                                 'namaBarang': widget.itemName,
                                 'deskripsi': description,
                                 'harga': price * weight,
+                                'hargaPerItem' : price,
                                 'berat': weight,
                                 'fotoBarang': imageFile
                               };
@@ -389,6 +392,7 @@ class _ItemContainerState extends State<ItemContainer>
                                 'namaBarang': widget.itemName,
                                 'deskripsi': description,
                                 'harga': price * weight,
+                                'hargaPerItem' : price,
                                 'berat': weight,
                                 'fotoBarang': imageFile
                               };
@@ -414,6 +418,7 @@ class _ItemContainerState extends State<ItemContainer>
                           'namaBarang': widget.itemName,
                           'deskripsi': description,
                           'harga': price * weight,
+                          'hargaPerItem' : price,
                           'berat': weight,
                           'fotoBarang': await pickImage()
                         };

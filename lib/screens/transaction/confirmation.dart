@@ -1,9 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rongsokin_user/constant.dart';
+import 'package:rongsokin_user/constant.dart';
+import 'package:rongsokin_user/screens/home/home.dart';
+import 'package:rongsokin_user/services/database.dart';
 
+var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 class Confirmation extends StatefulWidget {
-  const Confirmation({Key? key}) : super(key: key);
+  const Confirmation({
+    Key? key,
+    required this.documentId,
+    required this.userPengepulId,
+    required this.total,
+  }) : super(key: key);
+
+  final String documentId;
+  final String userPengepulId;
+  final num total;
 
   @override
   _ConfirmationState createState() => _ConfirmationState();
@@ -21,7 +36,13 @@ class _ConfirmationState extends State<Confirmation> {
         title: Text('Konfirmasi Akhir'),
       ),
       bottomNavigationBar: InkWell(
-        onTap: () {},
+        onTap: () async{
+          final user = FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser : null;
+          await DatabaseService(uid: user?.uid ?? null).finishRequest(widget.documentId);
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+            return Home();
+          }));
+        },
         child: Padding(
           padding: EdgeInsets.only(left: 30, right: 30, bottom: 20),
           child: Column(
@@ -38,7 +59,7 @@ class _ConfirmationState extends State<Confirmation> {
                     ),
                   ),
                   Text(
-                    'Rp0',
+                    '${currency.format(widget.total)}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -47,19 +68,21 @@ class _ConfirmationState extends State<Confirmation> {
                 ],
               ),
               SizedBox(height: 20),
-              Container(
-                height: 60,
-                width: 300,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text(
-                    'Selesai',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
+              Center(
+                child: Container(
+                  height: 60,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Selesai',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                      ),
                     ),
                   ),
                 ),
@@ -87,62 +110,75 @@ class _ConfirmationState extends State<Confirmation> {
             Stack(
               alignment: Alignment.center,
               children: [
-                Container(
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 40, right: 40, top: 10, bottom: 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Pasha Ungu',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                    .collection('usersPengepul')
+                    .doc(widget.userPengepulId)
+                    .snapshots(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData) {
+                      return Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 40, right: 40, top: 10, bottom: 15),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    (snapshot.data as dynamic)["username"],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.phone,
+                                        color: Colors.white,
+                                        size: 26,
+                                      ),
+                                      SizedBox(width: 3),
+                                      Text(
+                                        (snapshot.data as dynamic)["phoneNumber"],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.phone,
-                                  color: Colors.white,
-                                  size: 26,
-                                ),
-                                SizedBox(width: 3),
-                                Text(
-                                  '+6281658737356',
+                              Spacer(),
+                              Flexible(
+                                child: Text(
+                                  'Menunggu Pengepul Memproses...',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        Flexible(
-                          child: Text(
-                            'Pengepul sedang menuju ke tempatmu...',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                      );
+                    }
+                    return Center(
+                      child: Text('Loading...'),
+                    );
+                  }
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -164,10 +200,34 @@ class _ConfirmationState extends State<Confirmation> {
             ),
             SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return ItemListCard();
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                  .collection('requests')
+                  .doc(widget.documentId)
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData){
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: (snapshot.data as dynamic)["listBarang"].length,
+                      itemBuilder: (context, index) {
+                        return ItemListCard(
+                          index : index,
+                          kategori : (snapshot.data as dynamic)["listBarang"][index]["kategori"],
+                          namaBarang: (snapshot.data as dynamic)["listBarang"][index]["namaBarang"],
+                          deskripsi: (snapshot.data as dynamic)["listBarang"][index]["deskripsi"],
+                          harga: (snapshot.data as dynamic)["listBarang"][index]["harga"],
+                          berat: (snapshot.data as dynamic)["listBarang"][index]["berat"],
+                          fotoBarang : (snapshot.data as dynamic)["listBarang"][index]["fotoBarang"],
+                          total: (snapshot.data as dynamic)["total"]
+                        );
+                      },
+                    );
+                  }
+                  return Center(
+                    child: Text('Loading...'),
+                  );
                 },
               ),
             )
@@ -179,15 +239,32 @@ class _ConfirmationState extends State<Confirmation> {
 }
 
 class ItemListCard extends StatefulWidget {
-  const ItemListCard({Key? key}) : super(key: key);
+  const ItemListCard({
+    Key? key,
+    required this.index,
+    required this.kategori,
+    required this.namaBarang,
+    required this.deskripsi,
+    required this.berat,
+    required this.harga,
+    required this.fotoBarang,
+    required this.total
+  }) : super(key: key);
+
+  final int index;
+  final String kategori;
+  final String namaBarang;
+  final String deskripsi;
+  final int berat;
+  final int harga;
+  final String fotoBarang;
+  final num total;
 
   @override
   _ItemListCardState createState() => _ItemListCardState();
 }
 
 class _ItemListCardState extends State<ItemListCard> {
-  int price = 10000;
-  int weight = 1;
   var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
   @override
@@ -212,6 +289,10 @@ class _ItemListCardState extends State<ItemListCard> {
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(widget.fotoBarang,),
+                        fit: BoxFit.cover, 
+                      )
                     ),
                   ),
                   SizedBox(width: 20),
@@ -220,14 +301,14 @@ class _ItemListCardState extends State<ItemListCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Botol Kaca',
+                          widget.namaBarang,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          'Barang kondisi baik hanya goresan dikitssssssssssssssssssssssssssssssssssssssssssssssssssssffffffffffffffffffffffffffffffffffffffffffffffffs',
+                          widget.deskripsi,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
                           textAlign: TextAlign.justify,
@@ -255,13 +336,13 @@ class _ItemListCardState extends State<ItemListCard> {
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
-                        '1' + ' Kg',
+                        widget.berat.toString() + ' Kg',
                         style: TextStyle(fontSize: 16),
                       )
                     ],
                   ),
                   Text(
-                    'Rp10.000',
+                    '${currency.format(widget.harga)}',
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
@@ -269,40 +350,6 @@ class _ItemListCardState extends State<ItemListCard> {
             )
           ],
         ),
-        // child: ListTile(
-        //   leading: Container(
-        //     color: Colors.grey,
-        //     height: 50,
-        //     width: 50,
-        //   ),
-        //   title: Text(
-        //     'Botol Kaca' + ' (' + '1' + 'kg' + ')',
-        //     style: TextStyle(
-        //       fontSize: 18,
-        //       fontWeight: FontWeight.w600,
-        //     ),
-        //   ),
-        //   subtitle: Text(
-        //     'Barang kondisi baik hanya goresan dikit',
-        //     style: TextStyle(
-        //       color: Colors.black,
-        //       fontSize: 14,
-        //     ),
-        //   ),
-        //   trailing: Container(
-        //     width: 140,
-        //     child: Column(
-        //       children: [
-        //         Text(
-        //           '${currency.format(price * weight)}',
-        //           style: TextStyle(
-        //             fontSize: 16,
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }

@@ -149,11 +149,11 @@ class Home extends StatelessWidget {
                                                     right: 3),
                                                 child: InkWell(
                                                   onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                Confirmation()));
+                                                    // Navigator.push(
+                                                    //     context,
+                                                    //     MaterialPageRoute(
+                                                    //         builder: (context) =>
+                                                    //             Confirmation()));
                                                   },
                                                   child: Image.asset(
                                                       'assets/images/withdraw.png'),

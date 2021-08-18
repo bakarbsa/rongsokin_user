@@ -32,14 +32,14 @@ class DatabaseService {
   }
 
   //tambah request
-  Future createRequest(List<Map<String, dynamic>> listBarang) async{
+  Future createRequest(List<Map<String, dynamic>> listBarang, String lokasi, num total) async{
     int latestDocumentId = 0;  
     String newDocumentId = '';
     await db.collection('requests').doc('0latestDocumentId').get().then((value) {
       if(value.data()!.length > 0) {
         latestDocumentId = value.data()!["documentId"];
         newDocumentId = (latestDocumentId+1).toString();
-        iteratePhoto(listBarang, newDocumentId);
+        iteratePhoto(listBarang, newDocumentId, lokasi, total);
       } else {
         print('document id not found');
       }
@@ -54,6 +54,9 @@ class DatabaseService {
       'userId' : uid,
       'userPengepulId' : null,
       'diambil' : false,
+      'selesai' : false,
+      'total' : total,
+      'lokasi' : lokasi,
       'listBarang' : [
         for (var i = 0; i < listBarang.length; i++) {
           'check' : false,
@@ -61,50 +64,64 @@ class DatabaseService {
           'namaBarang' : listBarang[i]["namaBarang"],
           'deskripsi' : listBarang[i]["deskripsi"],
           'harga' : listBarang[i]["harga"],
+          'hargaPerItem' : listBarang[i]["hargaPerItem"],
           'berat' : listBarang[i]["berat"],
           'fotoBarang' : null,
         }
       ],
     });
+
+    return newDocumentId;
   }
 
   //iterate semua foto request 
-  Future iteratePhoto(List<Map<String, dynamic>> listBarang, String newDocumentId) async{
+  Future iteratePhoto(List<Map<String, dynamic>> listBarang, String newDocumentId, String lokasi, num total) async{
     for (var i = 0; i < listBarang.length; i++) {
-      await addRequestPhoto(listBarang[i]["fotoBarang"], i, listBarang, newDocumentId);
+      await addRequestPhoto(listBarang[i]["fotoBarang"], i, listBarang, newDocumentId, lokasi, total);
     }
   }
 
   //tambah foto request
-  Future addRequestPhoto(File imageFile, int index, List<Map<String, dynamic>> listBarang, String newDocumentId) async {
+  Future addRequestPhoto(File imageFile, int index, List<Map<String, dynamic>> listBarang, String newDocumentId, String lokasi, num total) async {
     String fileName = basename(imageFile.path);
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child(fileName + DateTime.now().toString());
     UploadTask uploadTask = ref.putFile(imageFile);
     uploadTask.whenComplete(() async{
       downloadUrl.add(await ref.getDownloadURL());
-      updateUrlPhoto(await ref.getDownloadURL(), index, listBarang, newDocumentId);
+      updateUrlPhoto(await ref.getDownloadURL(), index, listBarang, newDocumentId, lokasi, total);
     }).catchError((onError) {
       print(onError);
     });
   }
 
   //tambah link photo ke document firestore
-  Future updateUrlPhoto(String url, int index, List<Map<String, dynamic>> listBarang,  String newDocumentId) async{
+  Future updateUrlPhoto(String url, int index, List<Map<String, dynamic>> listBarang,  String newDocumentId, String lokasi, num total) async{
     await db.collection('requests').doc(newDocumentId).update({
       'documentId' : newDocumentId,
       'userId' : uid,
       'userPengepulId' : null,
+      'selesai' : false,
+      'total' : total,
+      'lokasi' : lokasi,
       'listBarang' : [
         for (var i = 0; i < listBarang.length; i++) {
           'kategori' : listBarang[i]["kategori"],
           'namaBarang' : listBarang[i]["namaBarang"],
           'deskripsi' : listBarang[i]["deskripsi"],
           'harga' : listBarang[i]["harga"],
+          'hargaPerItem' : listBarang[i]["hargaPerItem"],
           'berat' : listBarang[i]["berat"],
           'fotoBarang' : url,
         }
       ],
+    });
+  }
+
+  //finish request
+  Future finishRequest(String documentId) async{
+    await db.collection('requests').doc(documentId).update({
+      'selesai' : true
     });
   }
 }

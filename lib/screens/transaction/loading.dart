@@ -1,7 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rongsokin_user/screens/transaction/confirmation.dart';
 
 class Loading extends StatelessWidget {
-  const Loading({Key? key}) : super(key: key);
+  const Loading({
+    Key? key,
+    required this.documentId,
+  }) : super(key: key);
+
+  final String documentId;
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +41,52 @@ class Loading extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/loading_pengepul.png'),
-              SizedBox(height: 10),
-              Text(
-                'Mencari Pengepul...',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+          .collection("requests")
+          .doc(documentId)
+          .snapshots(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            if((snapshot.data as dynamic)["diambil"]) {
+              WidgetsBinding.instance!.addPostFrameCallback(
+                (_) => Navigator.push(context,
+                  MaterialPageRoute(
+                    builder: (context) => Confirmation(
+                      documentId: documentId,
+                      userPengepulId: (snapshot.data as dynamic)["userPengepulId"],
+                      total: (snapshot.data as dynamic)["total"],
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/loading_pengepul.png'),
+                      SizedBox(height: 10),
+                      Text(
+                        'Mencari Pengepul...',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          }
+          return Center(
+            child: Text('loading...'),
+          );
+        }
       ),
     );
   }

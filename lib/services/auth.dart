@@ -56,11 +56,12 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future addRequest(List<Map<String, dynamic>> listBarang) async{
+  Future createRequest(List<Map<String, dynamic>> listBarang, String lokasi, num total) async{
     try{
       final user = FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser : null;
-      await DatabaseService(uid: user?.uid ?? null).createRequest(listBarang);
-      return user;
+      final documentId = await DatabaseService(uid: user?.uid ?? null).createRequest(listBarang, lokasi, total);
+      print(documentId);
+      return documentId;
     }catch(e){
       print(e.toString());
     }
