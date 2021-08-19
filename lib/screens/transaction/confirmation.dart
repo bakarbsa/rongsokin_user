@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rongsokin_user/constant.dart';
-import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/services/database.dart';
 
 var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+
 class Confirmation extends StatefulWidget {
   const Confirmation({
     Key? key,
@@ -25,6 +25,24 @@ class Confirmation extends StatefulWidget {
 }
 
 class _ConfirmationState extends State<Confirmation> {
+  List<String> _splitName = [];
+
+  @override
+  void initState() {
+    StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('usersPengepul')
+            .doc(widget.userPengepulId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _splitName.addAll(
+                (snapshot.data as dynamic)["username"].toString().split(" "));
+          }
+          return Text('Error');
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,9 +54,12 @@ class _ConfirmationState extends State<Confirmation> {
         title: Text('Konfirmasi Akhir'),
       ),
       bottomNavigationBar: InkWell(
-        onTap: () async{
-          final user = FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser : null;
-          await DatabaseService(uid: user?.uid ?? null).finishRequest(widget.documentId);
+        onTap: () async {
+          final user = FirebaseAuth.instance.currentUser != null
+              ? FirebaseAuth.instance.currentUser
+              : null;
+          await DatabaseService(uid: user?.uid ?? null)
+              .finishRequest(widget.documentId);
           Navigator.of(context).push(MaterialPageRoute(builder: (_) {
             return Home();
           }));
@@ -111,75 +132,79 @@ class _ConfirmationState extends State<Confirmation> {
               alignment: Alignment.center,
               children: [
                 StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                    .collection('usersPengepul')
-                    .doc(widget.userPengepulId)
-                    .snapshots(),
-                  builder: (context, snapshot) {
-                    if(snapshot.hasData) {
-                      return Container(
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 40, right: 40, top: 10, bottom: 15),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    (snapshot.data as dynamic)["username"],
+                    stream: FirebaseFirestore.instance
+                        .collection('usersPengepul')
+                        .doc(widget.userPengepulId)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 40, right: 40, top: 10, bottom: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      _splitName.length <= 1
+                                      ? _splitName[0]
+                                      : _splitName[0] + ' ' + _splitName[1],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: _splitName.length <= 1 ? 20 : 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.phone,
+                                          color: Colors.white,
+                                          size: 26,
+                                        ),
+                                        SizedBox(width: 3),
+                                        Text(
+                                          (snapshot.data
+                                              as dynamic)["phoneNumber"],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Spacer(),
+                                Flexible(
+                                  child: Text(
+                                    'Menunggu Pengepul Memproses...',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
                                     ),
                                   ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.phone,
-                                        color: Colors.white,
-                                        size: 26,
-                                      ),
-                                      SizedBox(width: 3),
-                                      Text(
-                                        (snapshot.data as dynamic)["phoneNumber"],
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Spacer(),
-                              Flexible(
-                                child: Text(
-                                  'Menunggu Pengepul Memproses...',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                        );
+                      }
+                      return Center(
+                        child: Text('Loading...'),
                       );
-                    }
-                    return Center(
-                      child: Text('Loading...'),
-                    );
-                  }
-                ),
+                    }),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Container(
@@ -202,26 +227,32 @@ class _ConfirmationState extends State<Confirmation> {
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                  .collection('requests')
-                  .doc(widget.documentId)
-                  .snapshots(),
+                    .collection('requests')
+                    .doc(widget.documentId)
+                    .snapshots(),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData){
+                  if (snapshot.hasData) {
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: (snapshot.data as dynamic)["listBarang"].length,
+                      itemCount:
+                          (snapshot.data as dynamic)["listBarang"].length,
                       itemBuilder: (context, index) {
                         return ItemListCard(
-                          index : index,
-                          kategori : (snapshot.data as dynamic)["listBarang"][index]["kategori"],
-                          namaBarang: (snapshot.data as dynamic)["listBarang"][index]["namaBarang"],
-                          deskripsi: (snapshot.data as dynamic)["listBarang"][index]["deskripsi"],
-                          harga: (snapshot.data as dynamic)["listBarang"][index]["harga"],
-                          berat: (snapshot.data as dynamic)["listBarang"][index]["berat"],
-                          fotoBarang : (snapshot.data as dynamic)["listBarang"][index]["fotoBarang"],
-                          total: (snapshot.data as dynamic)["total"]
-                        );
+                            index: index,
+                            kategori: (snapshot.data as dynamic)["listBarang"]
+                                [index]["kategori"],
+                            namaBarang: (snapshot.data as dynamic)["listBarang"]
+                                [index]["namaBarang"],
+                            deskripsi: (snapshot.data as dynamic)["listBarang"]
+                                [index]["deskripsi"],
+                            harga: (snapshot.data as dynamic)["listBarang"]
+                                [index]["harga"],
+                            berat: (snapshot.data as dynamic)["listBarang"]
+                                [index]["berat"],
+                            fotoBarang: (snapshot.data as dynamic)["listBarang"]
+                                [index]["fotoBarang"],
+                            total: (snapshot.data as dynamic)["total"]);
                       },
                     );
                   }
@@ -239,17 +270,17 @@ class _ConfirmationState extends State<Confirmation> {
 }
 
 class ItemListCard extends StatefulWidget {
-  const ItemListCard({
-    Key? key,
-    required this.index,
-    required this.kategori,
-    required this.namaBarang,
-    required this.deskripsi,
-    required this.berat,
-    required this.harga,
-    required this.fotoBarang,
-    required this.total
-  }) : super(key: key);
+  const ItemListCard(
+      {Key? key,
+      required this.index,
+      required this.kategori,
+      required this.namaBarang,
+      required this.deskripsi,
+      required this.berat,
+      required this.harga,
+      required this.fotoBarang,
+      required this.total})
+      : super(key: key);
 
   final int index;
   final String kategori;
@@ -287,13 +318,14 @@ class _ItemListCardState extends State<ItemListCard> {
                     height: 80,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(widget.fotoBarang,),
-                        fit: BoxFit.cover, 
-                      )
-                    ),
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            widget.fotoBarang,
+                          ),
+                          fit: BoxFit.cover,
+                        )),
                   ),
                   SizedBox(width: 20),
                   Expanded(

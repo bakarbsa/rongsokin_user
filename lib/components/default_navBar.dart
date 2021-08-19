@@ -36,7 +36,7 @@ class DefaultNavBar extends StatelessWidget {
               Icons.home,
               color: MenuState.home == selectedMenu
                   ? kPrimaryColor
-                  : Color(0xFF6D6D6D),
+                  : inActiveIconColor,
             ),
             onPressed: () {
               Navigator.of(context)
@@ -49,7 +49,7 @@ class DefaultNavBar extends StatelessWidget {
             icon: Icon(Icons.receipt_long,
                 color: MenuState.transaction == selectedMenu
                     ? kPrimaryColor
-                    : Color(0xFF6D6D6D)),
+                    : inActiveIconColor),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return SelectItemScreen();
@@ -61,7 +61,7 @@ class DefaultNavBar extends StatelessWidget {
               Icons.person,
               color: MenuState.profile == selectedMenu
                   ? kPrimaryColor
-                  : Color(0xFF6D6D6D),
+                  : inActiveIconColor,
             ),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
