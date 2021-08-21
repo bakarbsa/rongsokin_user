@@ -6,6 +6,8 @@ import 'package:rongsokin_user/components/default_content_page.dart';
 import 'package:rongsokin_user/components/default_navBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
+import 'package:rongsokin_user/screens/home/cara_menggunakan_aplikasi.dart';
+import 'package:rongsokin_user/screens/home/cerita_kami.dart';
 import 'package:rongsokin_user/screens/home/jenis_sampah.dart';
 import 'package:rongsokin_user/screens/home/list_articles.dart';
 import 'package:rongsokin_user/screens/transaction/confirmation.dart';
@@ -317,26 +319,14 @@ class Home extends StatelessWidget {
                     ListImage(
                       assetImage: 'assets/images/cara_penggunaan_aplikasi.png',
                       title: 'Cara Penggunaan Aplikasi',
-                      content: Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 200,
-                              height: 200,
-                              child: Image.asset(
-                                  'assets/images/cara_penggunaan_aplikasi.png'),
-                            ),
-                            Text(
-                                'Do ad est laborum commodo.Eu dolor et pariatur aliqua.')
-                          ],
-                        ),
-                      ),
+                      content: CaraMenggunakanAplikasi(),
                     ),
                     SizedBox(width: 10),
                     ListImage(
                         assetImage: 'assets/images/cerita_kami.png',
+                        padding: 0,
                         title: 'Cerita Kami',
-                        content: kenaliLebihDekat()),
+                        content: CeritaKami()),
                     SizedBox(width: 10),
                     InkWell(
                       onTap: () {
@@ -523,19 +513,22 @@ class ListImage extends StatelessWidget {
       {Key? key,
       required this.assetImage,
       required this.content,
-      required this.title})
+      required this.title,
+      this.padding = 20})
       : super(key: key);
 
   final String assetImage;
   final Widget content;
   final String title;
+  final double padding;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return DefaultContentPage(content: content, title: title);
+          return DefaultContentPage(
+              content: content, title: title, padding: padding);
         }));
       },
       child: Container(

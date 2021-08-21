@@ -27,7 +27,7 @@ List<Article> listArticles = [
     linkArticle: 'https://indonesia.go.id/kategori/indonesia-dalam-angka/2533/membenahi-tata-kelola-sampah-nasional'
   ),
   Article(
-    photoArticle: 'assets/images/article_1.png',
+    photoArticle: 'assets/images/article_2.jpg',
     titleArticle: 'Peluang Bisnis Baru: Limbah Elektronik \nIndonesia Bernilai Rp 200 Triliun',
     writerArticle: 'Liberty Jemadu',
     dateArticle: '06 Maret 2021',
@@ -36,7 +36,7 @@ List<Article> listArticles = [
     linkArticle: 'https://www.suara.com/tekno/2021/03/06/190500/peluang-bisnis-baru-limbah-elektronik-indonesia-bernilai-rp-200-triliun'
   ),
   Article(
-    photoArticle: 'assets/images/article_1.png',
+    photoArticle: 'assets/images/article_3.jpg',
     titleArticle: 'Penambangan Limbah Elektronik Bisa \nMenjadi Bisnis Besar Dan Baik Untuk \nPlanet Ini',
     writerArticle: 'Liberty Jemadu',
     dateArticle: '18 Juli 2018',

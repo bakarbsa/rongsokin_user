@@ -75,26 +75,18 @@ class _ArticleImageState extends State<ArticleImage> {
               padding: EdgeInsets.symmetric(horizontal: 0),
               child: Stack(
                 children: [
-                  Hero(
-                    tag: widget.id.toString(),
-                    child: Image.asset(widget.article.photoArticle),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: <Color>[
-                              Colors.black.withOpacity(0.35),
-                              Colors.transparent,
-                            ], // red to yellow
-                            tileMode: TileMode.repeated,
-                          )),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 180,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Hero(
+                        tag: widget.id.toString(),
+                        child: Image.asset(
+                          widget.article.photoArticle,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ],

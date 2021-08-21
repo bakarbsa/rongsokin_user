@@ -43,9 +43,9 @@ class DefaultCardArticle extends StatelessWidget {
                           alignment: Alignment.topCenter,
                         ),
                       ),
-                      Image.asset(
-                        article.photoArticle,
-                        fit: BoxFit.cover,
+                      Container(
+                        decoration:
+                            BoxDecoration(color: Colors.black.withOpacity(0.4)),
                       ),
                       Positioned(
                         bottom: 15,

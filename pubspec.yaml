@@ -44,6 +44,7 @@ dependencies:
 
   #state management
   provider: ^5.0.0
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   flutter_test:

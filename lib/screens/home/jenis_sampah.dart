@@ -11,7 +11,7 @@ class JenisSampah extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
@@ -34,6 +34,9 @@ class JenisSampah extends StatelessWidget {
               ),
               Tab(
                 text: 'Logam',
+              ),
+              Tab(
+                text: 'Kain',
               ),
             ],
           ),
@@ -79,6 +82,13 @@ class JenisSampah extends StatelessWidget {
                     title: logamList[index], price: setPrice(logamList[index]));
               },
             ),
+            ListView.builder(
+              itemCount: kainList.length,
+              itemBuilder: (context, index) {
+                return ItemList(
+                    title: kainList[index], price: setPrice(kainList[index]));
+              },
+            ),
           ],
         ),
       ),
@@ -98,6 +108,18 @@ class ItemList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+    String unit = '';
+    //Set Satuan
+    if (getCategory(title) == 'Elektronik')
+      unit = 'unit';
+    else if (title == 'Galon' || title == 'Tas')
+      unit = 'pcs';
+    else if (title == 'Radiator')
+      unit = 'set';
+    else if (title == 'Sepatu')
+      unit = 'pasang';
+    else
+      unit = 'Kg';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Card(
@@ -105,7 +127,7 @@ class ItemList extends StatelessWidget {
         child: ListTile(
           title: Text(this.title),
           subtitle: Text(
-            currency.format(price),
+            currency.format(price) + '/' + unit,
             style: TextStyle(
               color: kPrimaryColor,
               fontSize: 16,

@@ -5,11 +5,12 @@ import 'package:rongsokin_user/enums.dart';
 
 class DefaultContentPage extends StatelessWidget {
   const DefaultContentPage(
-      {Key? key, required this.content, required this.title})
+      {Key? key, required this.content, required this.title, this.padding = 20})
       : super(key: key);
 
   final Widget content;
   final String title;
+  final double padding;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class DefaultContentPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(padding),
           child: content,
         ),
       ),
