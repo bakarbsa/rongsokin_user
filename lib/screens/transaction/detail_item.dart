@@ -6,8 +6,8 @@ import 'package:rongsokin_user/components/default_alert_dialog.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/models/items_model.dart';
 import 'package:intl/intl.dart';
-import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/screens/transaction/loading.dart';
+import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:rongsokin_user/services/auth.dart';
 
 num total = 0;
@@ -45,18 +45,25 @@ class _DetailItemState extends State<DetailItem> {
         return ShowAlertDialog(
             context: context,
             alertMessage:
-                "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
+              "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
             press: () async {
               widget.selectedItems.clear();
               listBarang.clear();
               total = 0;
               Navigator.of(context)
                   .pushReplacement(MaterialPageRoute(builder: (_) {
-                return Home();
+                return SelectItemScreen();
               }));
             });
       }) ??
     false;
+  }
+
+  void initState() {
+    setState(() {
+      listBarang.clear();
+    });
+    super.initState();
   }
 
   @override
@@ -130,7 +137,7 @@ class _DetailItemState extends State<DetailItem> {
                     }
                   }
                   if (checkNullPrice == false) {
-                    print(total);
+                    print(listBarang);
                     dynamic result = await _auth.createRequest(listBarang, address, total);
                     if (result == null) {
                       print('error');
@@ -279,10 +286,16 @@ class _ItemContainerState extends State<ItemContainer>
     unit = '';
     //Set Satuan
     if (getCategory(widget.itemName) == 'Elektronik')
+      unit = ' unit';
+    else if (widget.itemName == 'Galon' || widget.itemName == 'Tas')
+      unit = ' pcs';
+    else if (widget.itemName == 'Radiator')
+      unit = ' set';
+    else if (widget.itemName == 'Sepatu')
       unit = '';
     else
       unit = ' Kg';
-
+      
     return Column(
       children: [
         Row(

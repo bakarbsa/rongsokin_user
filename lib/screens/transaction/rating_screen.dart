@@ -1,9 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rongsokin_user/components/default_appBar.dart';
 import 'package:rongsokin_user/constant.dart';
+import 'package:rongsokin_user/screens/home/home.dart';
+import 'package:rongsokin_user/services/database.dart';
 
 class RatingScreen extends StatefulWidget {
-  const RatingScreen({Key? key}) : super(key: key);
+  const RatingScreen({
+    Key? key,
+    required this.userPengepulId,
+    required this.namaPengepul
+  }) : super(key: key);
+
+  final String userPengepulId;
+  final String namaPengepul;
 
   @override
   _RatingScreenState createState() => _RatingScreenState();
@@ -11,14 +21,27 @@ class RatingScreen extends StatefulWidget {
 
 class _RatingScreenState extends State<RatingScreen> {
   int _rating = 0;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(backgroundColor: kPrimaryColor),
+      appBar: DefaultAppBar(backgroundColor: kPrimaryColor, ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 65, right: 65, bottom: 20),
         child: InkWell(
-          onTap: () {},
+          onTap: () async{
+            final user = FirebaseAuth.instance.currentUser != null
+              ? FirebaseAuth.instance.currentUser
+              : null;
+            await DatabaseService(uid: user?.uid ?? null).giveRating(widget.userPengepulId, _rating);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()),
+            );
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 60,
@@ -49,7 +72,7 @@ class _RatingScreenState extends State<RatingScreen> {
           Image.asset('assets/images/good_rating.png'),
           SizedBox(height: 30),
           Text(
-            'Nama Pengepul',
+            widget.namaPengepul,
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,

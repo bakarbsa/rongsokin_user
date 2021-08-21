@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/screens/transaction/confirmation.dart';
+import 'package:rongsokin_user/services/database.dart';
 
 class Loading extends StatelessWidget {
   const Loading({
@@ -17,7 +20,16 @@ class Loading extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: InkWell(
-          onTap: () async {},
+          onTap: () async {
+            final user = FirebaseAuth.instance.currentUser != null
+              ? FirebaseAuth.instance.currentUser
+              : null;
+            await DatabaseService(uid: user?.uid ?? null)
+                .cancelRequest(documentId);
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+              return Home();
+            }));
+          },
           child: Container(
             height: 60,
             width: 300,
@@ -55,7 +67,6 @@ class Loading extends StatelessWidget {
                     builder: (context) => Confirmation(
                       documentId: documentId,
                       userPengepulId: (snapshot.data as dynamic)["userPengepulId"],
-                      total: (snapshot.data as dynamic)["total"],
                     ),
                   ),
                 ),

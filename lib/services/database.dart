@@ -48,15 +48,22 @@ class DatabaseService {
     await db.collection('requests').doc('0latestDocumentId').update({
       'documentId' : latestDocumentId+1
     });
+    
+    DocumentSnapshot documentUser = await db.collection("users").doc(uid).get();
+    dynamic jsonUser = documentUser.data();
 
     await db.collection('requests').doc(newDocumentId).set({
       'documentId' : newDocumentId,
       'userId' : uid,
+      'namaUser' : jsonUser["username"],
       'userPengepulId' : null,
+      'namaUserPengepul' : '',
       'diambil' : false,
       'selesai' : false,
       'total' : total,
       'lokasi' : lokasi,
+      'dibatalkan' : false,
+      'tanggal' : DateTime.now(),
       'listBarang' : [
         for (var i = 0; i < listBarang.length; i++) {
           'check' : false,
@@ -76,6 +83,7 @@ class DatabaseService {
 
   //iterate semua foto request 
   Future iteratePhoto(List<Map<String, dynamic>> listBarang, String newDocumentId, String lokasi, num total) async{
+    print(listBarang);
     for (var i = 0; i < listBarang.length; i++) {
       await addRequestPhoto(listBarang[i]["fotoBarang"], i, listBarang, newDocumentId, lokasi, total);
     }
@@ -104,6 +112,7 @@ class DatabaseService {
       'selesai' : false,
       'total' : total,
       'lokasi' : lokasi,
+      'dibatalkan' : false,
       'listBarang' : [
         for (var i = 0; i < listBarang.length; i++) {
           'kategori' : listBarang[i]["kategori"],
@@ -118,10 +127,44 @@ class DatabaseService {
     });
   }
 
-  //finish request
-  Future finishRequest(String documentId) async{
+  //batalkan request
+  Future cancelRequest(String documentId) async {
+    await db.collection('requests').doc(documentId).update({
+      'dibatalkan' : true
+    });
+  }
+
+  //finish request dan tambah point
+  Future finishRequest(String documentId, num total) async{
+    //finsih request
     await db.collection('requests').doc(documentId).update({
       'selesai' : true
+    });
+
+    //ambil data poin user
+    DocumentSnapshot documentUser = await FirebaseFirestore.instance.collection('users').doc(uid).get(); 
+    dynamic jsonUser = documentUser.data();
+
+    //tambah poin
+    await db.collection('users').doc(uid).update({
+      'poin' : jsonUser["poin"]+(total~/10) 
+    });
+  }
+
+  //kasih rating
+  Future giveRating(String userPengepulId, num rating) async{
+    num ratingResult;
+    //ambil data user pengepul
+    DocumentSnapshot documentUserPengepul = await FirebaseFirestore.instance.collection('usersPengepul').doc(userPengepulId).get(); 
+    dynamic jsonUserPengepul = documentUserPengepul.data();
+    //cek banyaknya transaksi 
+    num jumlahTransactions = jsonUserPengepul["historyTransactions"].length;
+    //hitung rating
+    ratingResult = 
+    ((jsonUserPengepul["rating"]*(jumlahTransactions == 1 ? jumlahTransactions : jumlahTransactions-1))+rating)/jumlahTransactions;
+    //update rating di database  
+    await db.collection('usersPengepul').doc(userPengepulId).update({
+      'rating' : ratingResult
     });
   }
 }

@@ -10,7 +10,6 @@ import 'package:rongsokin_user/screens/home/cara_menggunakan_aplikasi.dart';
 import 'package:rongsokin_user/screens/home/cerita_kami.dart';
 import 'package:rongsokin_user/screens/home/jenis_sampah.dart';
 import 'package:rongsokin_user/screens/home/list_articles.dart';
-import 'package:rongsokin_user/screens/transaction/confirmation.dart';
 import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 

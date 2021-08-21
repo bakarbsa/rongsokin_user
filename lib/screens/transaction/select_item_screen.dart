@@ -62,23 +62,33 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
   List<String> selectedItems = [];
   Future<bool> _onBackPressed() async {
     return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ShowAlertDialog(
             context: context,
-            builder: (BuildContext context) {
-              return ShowAlertDialog(
-                  context: context,
-                  alertMessage:
-                      "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
-                  press: () async {
-                    for (String key in _isChecked.keys) {
-                      _isChecked[key] = false;
-                    }
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (_) {
-                      return Home();
-                    }));
-                  });
-            }) ??
-        false;
+            alertMessage:
+                "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
+            press: () async {
+              for (String key in _isChecked.keys) {
+                _isChecked[key] = false;
+              }
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (_) {
+                return Home();
+              }));
+            });
+      }) ??
+    false;
+  }
+
+  @override
+  void initState() {
+    for (String key in _isChecked.keys) {
+      _isChecked[key] = false;
+    }
+    selectedItems.clear();
+    print(selectedItems);
+    super.initState();
   }
 
   @override
@@ -127,12 +137,15 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
               if (value) selectedItems.add(key);
             });
             if (selectedItems.length != 0) {
+              print(selectedItems);
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailItem(
-                            selectedItems: this.selectedItems,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailItem(
+                    selectedItems: this.selectedItems,
+                  )
+                )
+              );
             }
           },
           child: Container(

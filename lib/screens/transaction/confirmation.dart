@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rongsokin_user/constant.dart';
-import 'package:rongsokin_user/screens/home/home.dart';
+import 'package:rongsokin_user/screens/transaction/detail_item.dart';
+import 'package:rongsokin_user/screens/transaction/rating_screen.dart';
 import 'package:rongsokin_user/services/database.dart';
 
 var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
@@ -13,12 +14,10 @@ class Confirmation extends StatefulWidget {
     Key? key,
     required this.documentId,
     required this.userPengepulId,
-    required this.total,
   }) : super(key: key);
 
   final String documentId;
   final String userPengepulId;
-  final num total;
 
   @override
   _ConfirmationState createState() => _ConfirmationState();
@@ -26,21 +25,33 @@ class Confirmation extends StatefulWidget {
 
 class _ConfirmationState extends State<Confirmation> {
   List<String> _splitName = [];
+  num total = 0;
+  String userPengepulId = '';
+  String namaPengepul = '';
+
+  String? splitUsername(String username) {
+    _splitName.addAll(username.split(" "));
+  }
 
   @override
   void initState() {
-    StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('usersPengepul')
-            .doc(widget.userPengepulId)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _splitName.addAll(
-                (snapshot.data as dynamic)["username"].toString().split(" "));
-          }
-          return Text('Error');
-        });
+    super.initState(); 
+    getTotal();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> getTotal() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('requests').doc(widget.documentId).get(); 
+    dynamic jsonDocument = documentSnapshot.data();
+    setState(() {
+      total = jsonDocument['total'];
+      userPengepulId = jsonDocument['userPengepulId'];
+    });
+    print(total);
   }
 
   @override
@@ -55,13 +66,14 @@ class _ConfirmationState extends State<Confirmation> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () async {
+          print(listBarang);
           final user = FirebaseAuth.instance.currentUser != null
               ? FirebaseAuth.instance.currentUser
               : null;
           await DatabaseService(uid: user?.uid ?? null)
-              .finishRequest(widget.documentId);
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-            return Home();
+              .finishRequest(widget.documentId, total);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+            return RatingScreen(userPengepulId: userPengepulId, namaPengepul: namaPengepul);
           }));
         },
         child: Padding(
@@ -80,7 +92,7 @@ class _ConfirmationState extends State<Confirmation> {
                     ),
                   ),
                   Text(
-                    '${currency.format(widget.total)}',
+                    '${currency.format(total)}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -129,84 +141,87 @@ class _ConfirmationState extends State<Confirmation> {
             SizedBox(height: 10),
             //Detail User Container
             Stack(
-              alignment: Alignment.center,
+              // alignment: Alignment.center,
               children: [
                 StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('usersPengepul')
-                        .doc(widget.userPengepulId)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Container(
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 40, right: 40, top: 10, bottom: 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      _splitName.length <= 1
-                                      ? _splitName[0]
-                                      : _splitName[0] + ' ' + _splitName[1],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: _splitName.length <= 1 ? 20 : 17,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.phone,
-                                          color: Colors.white,
-                                          size: 26,
-                                        ),
-                                        SizedBox(width: 3),
-                                        Text(
-                                          (snapshot.data
-                                              as dynamic)["phoneNumber"],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Spacer(),
-                                Flexible(
-                                  child: Text(
-                                    'Menunggu Pengepul Memproses...',
+                  stream: FirebaseFirestore.instance
+                      .collection('usersPengepul')
+                      .doc(widget.userPengepulId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      splitUsername((snapshot.data as dynamic)["username"]);
+                      namaPengepul = (snapshot.data as dynamic)["username"];
+                      return Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 5, bottom: 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    _splitName.length <= 1 ?
+                                    _splitName[0] :
+                                    _splitName[0] + ' ' + _splitName[1],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: _splitName.length <= 1 ? 20 : 17,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.phone,
+                                        color: Colors.white,
+                                        size: 26,
+                                      ),
+                                      SizedBox(width: 3),
+                                      Text(
+                                        (snapshot.data as dynamic)["phoneNumber"],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 20,),
+                              Flexible(
+                                child: Text(
+                                  'Pengepul Akan Menuju Ke Tempat Anda Maksimal Pukul 15:00 WIB, silakan menunggu...',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      }
-                      return Center(
-                        child: Text('Loading...'),
+                        ),
                       );
-                    }),
+                    }
+                    return Center(
+                      child: Text('Loading...'),
+                    );
+                  }
+                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
                   child: Container(
                     height: 2,
                     color: Colors.white,
@@ -271,16 +286,16 @@ class _ConfirmationState extends State<Confirmation> {
 
 class ItemListCard extends StatefulWidget {
   const ItemListCard(
-      {Key? key,
-      required this.index,
-      required this.kategori,
-      required this.namaBarang,
-      required this.deskripsi,
-      required this.berat,
-      required this.harga,
-      required this.fotoBarang,
-      required this.total})
-      : super(key: key);
+    {Key? key,
+    required this.index,
+    required this.kategori,
+    required this.namaBarang,
+    required this.deskripsi,
+    required this.berat,
+    required this.harga,
+    required this.fotoBarang,
+    required this.total})
+    : super(key: key);
 
   final int index;
   final String kategori;
