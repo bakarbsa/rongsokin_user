@@ -15,11 +15,13 @@ class DefaultNavBar extends StatelessWidget {
   final MenuState selectedMenu;
   @override
   Widget build(BuildContext context) {
-    final Color inActiveIconColor = Color(0xFFB6B6B6);
+    final Color inActiveColor = Color(0xFF757575);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
         boxShadow: [
           BoxShadow(
               color: Colors.grey.withOpacity(0.8),
@@ -37,7 +39,7 @@ class DefaultNavBar extends StatelessWidget {
               Icons.home,
               color: MenuState.home == selectedMenu
                   ? kPrimaryColor
-                  : inActiveIconColor,
+                  : inActiveColor,
             ),
             onPressed: () {
               Navigator.of(context)
@@ -50,7 +52,7 @@ class DefaultNavBar extends StatelessWidget {
             icon: Icon(Icons.receipt_long,
                 color: MenuState.transaction == selectedMenu
                     ? kPrimaryColor
-                    : inActiveIconColor),
+                    : inActiveColor),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return HistoryList();
@@ -62,7 +64,7 @@ class DefaultNavBar extends StatelessWidget {
               Icons.person,
               color: MenuState.profile == selectedMenu
                   ? kPrimaryColor
-                  : inActiveIconColor,
+                  : inActiveColor,
             ),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {

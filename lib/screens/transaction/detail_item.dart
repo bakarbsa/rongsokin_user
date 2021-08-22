@@ -40,23 +40,23 @@ class _DetailItemState extends State<DetailItem> {
 
   Future<bool> _onBackPressed() async {
     return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ShowAlertDialog(
             context: context,
-            alertMessage:
-              "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
-            press: () async {
-              widget.selectedItems.clear();
-              listBarang.clear();
-              total = 0;
-              Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (_) {
-                return SelectItemScreen();
-              }));
-            });
-      }) ??
-    false;
+            builder: (BuildContext context) {
+              return ShowAlertDialog(
+                  context: context,
+                  alertMessage:
+                      "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
+                  press: () async {
+                    widget.selectedItems.clear();
+                    listBarang.clear();
+                    total = 0;
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (_) {
+                      return SelectItemScreen();
+                    }));
+                  });
+            }) ??
+        false;
   }
 
   void initState() {
@@ -138,13 +138,16 @@ class _DetailItemState extends State<DetailItem> {
                   }
                   if (checkNullPrice == false) {
                     print(listBarang);
-                    dynamic result = await _auth.createRequest(listBarang, address, total);
+                    dynamic result =
+                        await _auth.createRequest(listBarang, address, total);
                     if (result == null) {
                       print('error');
                     } else {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (_) {
-                        return Loading(documentId: result,);
+                        return Loading(
+                          documentId: result,
+                        );
                       }));
                     }
                   }
@@ -210,13 +213,13 @@ class _DetailItemState extends State<DetailItem> {
                   itemCount: widget.selectedItems.length,
                   itemBuilder: (context, index) {
                     return ItemContainer(
-                      itemName: widget.selectedItems[index],
-                      index: index,
-                      total: (num tot) {
-                        setState(() {
-                          total = tot;
+                        itemName: widget.selectedItems[index],
+                        index: index,
+                        total: (num tot) {
+                          setState(() {
+                            total = tot;
+                          });
                         });
-                      });
                   },
                 ),
               ),
@@ -264,9 +267,8 @@ class _ItemContainerState extends State<ItemContainer>
     super.initState();
   }
 
-  Future pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+  Future pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
 
     setState(() {
       if (pickedFile != null) {
@@ -295,7 +297,7 @@ class _ItemContainerState extends State<ItemContainer>
       unit = '';
     else
       unit = ' Kg';
-      
+
     return Column(
       children: [
         Row(
@@ -331,7 +333,7 @@ class _ItemContainerState extends State<ItemContainer>
                       'namaBarang': widget.itemName,
                       'deskripsi': description,
                       'harga': price * weight,
-                      'hargaPerItem' : price,
+                      'hargaPerItem': price,
                       'berat': weight,
                       'fotoBarang': imageFile
                     };
@@ -373,7 +375,7 @@ class _ItemContainerState extends State<ItemContainer>
                                 'namaBarang': widget.itemName,
                                 'deskripsi': description,
                                 'harga': price * weight,
-                                'hargaPerItem' : price,
+                                'hargaPerItem': price,
                                 'berat': weight,
                                 'fotoBarang': imageFile
                               };
@@ -405,7 +407,7 @@ class _ItemContainerState extends State<ItemContainer>
                                 'namaBarang': widget.itemName,
                                 'deskripsi': description,
                                 'harga': price * weight,
-                                'hargaPerItem' : price,
+                                'hargaPerItem': price,
                                 'berat': weight,
                                 'fotoBarang': imageFile
                               };
@@ -425,17 +427,151 @@ class _ItemContainerState extends State<ItemContainer>
                       ],
                     ),
                     InkWell(
-                      onTap: () async {
-                        listBarang[widget.index] = {
-                          'kategori': getCategory(widget.itemName),
-                          'namaBarang': widget.itemName,
-                          'deskripsi': description,
-                          'harga': price * weight,
-                          'hargaPerItem' : price,
-                          'berat': weight,
-                          'fotoBarang': await pickImage()
-                        };
-                      },
+                      onTap: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0))),
+                          contentPadding: EdgeInsets.only(top: 10.0),
+                          content: Container(
+                            width: 300.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 80.0,
+                                    ),
+                                    Text(
+                                      'Pilih Media',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        listBarang[widget.index] = {
+                                          'kategori':
+                                              getCategory(widget.itemName),
+                                          'namaBarang': widget.itemName,
+                                          'deskripsi': description,
+                                          'harga': price * weight,
+                                          'hargaPerItem': price,
+                                          'berat': weight,
+                                          'fotoBarang': await pickImage(
+                                              ImageSource.camera)
+                                        };
+                                      },
+                                      child: Container(
+                                        width: 150,
+                                        padding: EdgeInsets.only(
+                                            top: 20.0, bottom: 20.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(15.0),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Camera",
+                                          style: TextStyle(color: Colors.black),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        listBarang[widget.index] = {
+                                          'kategori':
+                                              getCategory(widget.itemName),
+                                          'namaBarang': widget.itemName,
+                                          'deskripsi': description,
+                                          'harga': price * weight,
+                                          'hargaPerItem': price,
+                                          'berat': weight,
+                                          'fotoBarang': await pickImage(
+                                              ImageSource.gallery)
+                                        };
+                                      },
+                                      child: Container(
+                                        width: 150,
+                                        padding: EdgeInsets.only(
+                                            top: 20.0, bottom: 20.0),
+                                        decoration: BoxDecoration(
+                                          color: kPrimaryColor,
+                                          borderRadius: BorderRadius.only(
+                                              bottomRight:
+                                                  Radius.circular(15.0)),
+                                        ),
+                                        child: Text(
+                                          "Gallery",
+                                          style: TextStyle(color: Colors.white),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        // AlertDialog(
+                        //   title: const Text('Pilih Media'),
+                        //   actions: <Widget>[
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //       children: [
+                        //         TextButton(
+                        //           onPressed: () async {
+                        //             listBarang[widget.index] = {
+                        //               'kategori': getCategory(widget.itemName),
+                        //               'namaBarang': widget.itemName,
+                        //               'deskripsi': description,
+                        //               'harga': price * weight,
+                        //               'hargaPerItem': price,
+                        //               'berat': weight,
+                        //               'fotoBarang':
+                        //                   await pickImage(ImageSource.camera)
+                        //             };
+                        //           },
+                        //           child: const Text('Camera'),
+                        //         ),
+                        //         TextButton(
+                        //           onPressed: () async {
+                        //             listBarang[widget.index] = {
+                        //               'kategori': getCategory(widget.itemName),
+                        //               'namaBarang': widget.itemName,
+                        //               'deskripsi': description,
+                        //               'harga': price * weight,
+                        //               'hargaPerItem': price,
+                        //               'berat': weight,
+                        //               'fotoBarang':
+                        //                   await pickImage(ImageSource.gallery)
+                        //             };
+                        //           },
+                        //           child: const Text('Gallery'),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
+                      ),
                       child: Container(
                         height: 30,
                         decoration: BoxDecoration(
