@@ -11,17 +11,22 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Container(
         padding: EdgeInsets.all(20),
-        child: Column(
+        child: ListView(
           children: [
-            Spacer(),
+            SizedBox(height: 50,),
             Image.asset("assets/images/logo_name_black.png"),
-            Spacer(),
-            Image.asset("assets/images/logo_image.png"),
-            Spacer(),
+            // Spacer(),
+            Container(
+              height: 200,
+              width: 200,
+              child: Image.asset("assets/images/logo_image.png"),
+            ),
+            SizedBox(height: 40,),
             SignInForm(),
-            Spacer(),
+            SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -44,7 +49,6 @@ class SignIn extends StatelessWidget {
                     )),
               ],
             ),
-            Spacer()
           ],
         ),
       ),

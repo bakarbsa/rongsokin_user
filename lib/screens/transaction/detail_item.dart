@@ -476,6 +476,7 @@ class _ItemContainerState extends State<ItemContainer>
                                           'fotoBarang': await pickImage(
                                               ImageSource.camera)
                                         };
+                                        Navigator.pop(context);
                                       },
                                       child: Container(
                                         width: 150,
@@ -507,6 +508,7 @@ class _ItemContainerState extends State<ItemContainer>
                                           'fotoBarang': await pickImage(
                                               ImageSource.gallery)
                                         };
+                                        Navigator.pop(context);
                                       },
                                       child: Container(
                                         width: 150,
