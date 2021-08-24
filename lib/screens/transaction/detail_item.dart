@@ -130,13 +130,25 @@ class _DetailItemState extends State<DetailItem> {
               child: InkWell(
                 onTap: () async {
                   bool checkNullPrice = false;
+                  bool checkNullPhoto = false;
+                  bool checkNullDesc = false;
                   for (int i = 0; i < widget.selectedItems.length; i++) {
                     if (listBarang[i]['harga'] == null ||
                         listBarang[i]['harga'] == 0) {
                       checkNullPrice = true;
                     }
+                    if (listBarang[i]['fotoBarang'] == null ||
+                        listBarang[i]['fotoBarang'] == 0) {
+                      checkNullPrice = true;
+                    }
+                    if (listBarang[i]['deskripsi'] == null ||
+                        listBarang[i]['deskripsi'] == 0) {
+                      checkNullPrice = true;
+                    }
                   }
-                  if (checkNullPrice == false) {
+                  if (checkNullPrice == false ||
+                      checkNullPhoto == false ||
+                      checkNullDesc == false) {
                     print(listBarang);
                     dynamic result =
                         await _auth.createRequest(listBarang, address, total);
