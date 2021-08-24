@@ -143,12 +143,15 @@ class _DetailItemState extends State<DetailItem> {
                     if (result == null) {
                       print('error');
                     } else {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) {
-                        return Loading(
-                          documentId: result,
-                        );
-                      }));
+                      await Future.delayed(Duration(seconds: 1))
+                      .then((value) => {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) {
+                          return Loading(
+                            documentId: result,
+                          );
+                        }))
+                      });
                     }
                   }
                 },
@@ -533,46 +536,6 @@ class _ItemContainerState extends State<ItemContainer>
                             ),
                           ),
                         ),
-                        // AlertDialog(
-                        //   title: const Text('Pilih Media'),
-                        //   actions: <Widget>[
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //       children: [
-                        //         TextButton(
-                        //           onPressed: () async {
-                        //             listBarang[widget.index] = {
-                        //               'kategori': getCategory(widget.itemName),
-                        //               'namaBarang': widget.itemName,
-                        //               'deskripsi': description,
-                        //               'harga': price * weight,
-                        //               'hargaPerItem': price,
-                        //               'berat': weight,
-                        //               'fotoBarang':
-                        //                   await pickImage(ImageSource.camera)
-                        //             };
-                        //           },
-                        //           child: const Text('Camera'),
-                        //         ),
-                        //         TextButton(
-                        //           onPressed: () async {
-                        //             listBarang[widget.index] = {
-                        //               'kategori': getCategory(widget.itemName),
-                        //               'namaBarang': widget.itemName,
-                        //               'deskripsi': description,
-                        //               'harga': price * weight,
-                        //               'hargaPerItem': price,
-                        //               'berat': weight,
-                        //               'fotoBarang':
-                        //                   await pickImage(ImageSource.gallery)
-                        //             };
-                        //           },
-                        //           child: const Text('Gallery'),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
                       ),
                       child: Container(
                         height: 30,

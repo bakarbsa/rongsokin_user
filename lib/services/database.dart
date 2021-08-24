@@ -34,11 +34,22 @@ class DatabaseService {
   //tambah request
   Future createRequest(List<Map<String, dynamic>> listBarang, String lokasi, num total) async{
     int latestDocumentId = 0;  
+    int checkDocumentId = 0;  
     String newDocumentId = '';
     await db.collection('requests').doc('0latestDocumentId').get().then((value) {
       if(value.data()!.length > 0) {
         latestDocumentId = value.data()!["documentId"];
-        newDocumentId = (latestDocumentId+1).toString();
+        checkDocumentId = latestDocumentId~/10;
+        if(checkDocumentId < 1) {
+          newDocumentId = 'r0000000' + (latestDocumentId+1).toString();
+        }
+        if(checkDocumentId > 1 && checkDocumentId < 10) {
+          newDocumentId = 'r000000' + (latestDocumentId+1).toString();
+        }
+        if(checkDocumentId > 10 && checkDocumentId < 100) {
+          newDocumentId = 'r00000' + (latestDocumentId+1).toString();
+        }
+        print(newDocumentId);
         iteratePhoto(listBarang, newDocumentId, lokasi, total);
       } else {
         print('document id not found');
