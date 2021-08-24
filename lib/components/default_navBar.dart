@@ -4,7 +4,7 @@ import 'package:rongsokin_user/enums.dart';
 import 'package:rongsokin_user/screens/history/history_list.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/screens/profile/profile.dart';
-import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
+// import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 
 class DefaultNavBar extends StatelessWidget {
   const DefaultNavBar({

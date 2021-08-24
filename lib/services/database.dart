@@ -143,6 +143,7 @@ class DatabaseService {
     await db.collection('requests').doc(documentId).update({
       'dibatalkan' : true
     });
+    return 'dibatalkan berhasil';
   }
 
   //finish request dan tambah point

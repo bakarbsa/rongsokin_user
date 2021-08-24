@@ -21,14 +21,13 @@ class Loading extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: InkWell(
           onTap: () async {
-            final user = FirebaseAuth.instance.currentUser != null
-              ? FirebaseAuth.instance.currentUser
-              : null;
-            await DatabaseService(uid: user?.uid ?? null)
-                .cancelRequest(documentId);
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return Home();
-            }));
+            final user = FirebaseAuth.instance.currentUser;
+            dynamic result = await DatabaseService(uid: user?.uid).cancelRequest(documentId);
+            if(result == 'dibatalkan berhasil') {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+                return Home();
+              }));
+            }
           },
           child: Container(
             height: 60,
@@ -62,7 +61,7 @@ class Loading extends StatelessWidget {
           if(snapshot.hasData) {
             if((snapshot.data as dynamic)["diambil"]) {
               WidgetsBinding.instance!.addPostFrameCallback(
-                (_) => Navigator.push(context,
+                (_) => Navigator.pushReplacement(context,
                   MaterialPageRoute(
                     builder: (context) => Confirmation(
                       documentId: documentId,

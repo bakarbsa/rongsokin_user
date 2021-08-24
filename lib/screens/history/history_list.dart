@@ -44,49 +44,48 @@ class HistoryList extends StatelessWidget {
                 builder: (context,  AsyncSnapshot<QuerySnapshot>snapshot) {
                   if(snapshot.hasData) {
                     if(snapshot.data!.docs.length == 0) {
-                      return Expanded(
-                        child: Center(
-                          child: Column(
-                            children: [
-                              SizedBox(height: 100,),
-                              Icon(Icons.warning_amber_outlined, size: 60, color: Colors.yellow,),
-                              SizedBox(height: 50,),
-                              Text(
-                                'Tidak Ada Riwayat',
-                                style: kHeaderText,
-                                textAlign: TextAlign.center,
-                              ),   
-                              SizedBox(height: 200,),
-                            ],
-                          ),
+                      return Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 100,),
+                            Icon(Icons.warning_amber_outlined, size: 60, color: Colors.yellow,),
+                            SizedBox(height: 50,),
+                            Text(
+                              'Tidak Ada Riwayat',
+                              style: kHeaderText,
+                              textAlign: TextAlign.center,
+                            ),   
+                            SizedBox(height: 200,),
+                          ],
                         ),
                       );
+                    } else {
+                      return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot docSnapshot = snapshot.data!.docs[index]; 
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                                return DetailHistory(
+                                  documentId: docSnapshot["documentId"],
+                                  userPengepulId: docSnapshot["userPengepulId"],
+                                  total: docSnapshot["total"]
+                                );
+                              }));
+                            },
+                            child: HistoryContent(
+                              name: docSnapshot["namaUserPengepul"], 
+                              address: docSnapshot["lokasi"], 
+                              price: '${currency.format(docSnapshot["total"])}', 
+                              date: docSnapshot["tanggal"]
+                            )
+                          );
+                        },
+                      );
                     }
-                    return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot docSnapshot = snapshot.data!.docs[index]; 
-                        return InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                              return DetailHistory(
-                                documentId: docSnapshot["documentId"],
-                                userPengepulId: docSnapshot["userPengepulId"],
-                                total: docSnapshot["total"]
-                              );
-                            }));
-                          },
-                          child: HistoryContent(
-                            name: docSnapshot["namaUserPengepul"], 
-                            address: docSnapshot["lokasi"], 
-                            price: '${currency.format(docSnapshot["total"])}', 
-                            date: docSnapshot["tanggal"]
-                          )
-                        );
-                      },
-                    );
                   }
                   return Center(child: CircularProgressIndicator(),);
                 }
