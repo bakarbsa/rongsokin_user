@@ -13,7 +13,7 @@ final List<String> imgList = [
 ];
 
 final List<String> nameList = [
-  'Muhammad Adi Afkari',
+  'Muhammad Adib Afkari',
   'Cellerina Yolanda E.',
   'Annisyah Amelia F.',
   'Shafira Cahyasakti',
@@ -29,11 +29,11 @@ final List<String> chiefList = [
 ];
 
 final List<String> descriptionList = [
-  'Posisi tertinggi dari suatu perusahaan dan bertanggung jawab untuk membuat keputusan demi keberlangsungan perusahaan',
-  'Bertanggung jawab terhadap pemasaran produk dan keuangan perusahaan',
-  'Bertanggung jawab atas tampilan visual secara keseluruhan di berbagai media',
-  'Bertanggung jawab melakukan aktivitas penelitian dan pengembangan yang berorientasi ke masa yang akan datang dan jangka panjang',
-  'Bertanggung jawab dalam membuat sebuah keputusan berkaitan dengan teknologi dan seluruh infrastruktur kerja yang ada'
+  'Hai Rongsokers! Aku Adib, CEO dari Rongsokin. Disini aku bertanggung jawab atas keputusan yang akan diambil demi keberlangsungan perusahaan.',
+  'Halo! Aku Yolla bertanggung jawab terhadap pemasaran produk dan keuangan perusahaan',
+  'Halo! Aku Nisyah, disini aku bertanggung jawab atas tampilan visual secara keseluruhan di berbagai media.',
+  'Kenalin Aku Shafira bertanggung jawab dalam bidang penelitian dan pengembangan jangka panjang guna keberlanjutan aplikasi.',
+  'Halo! Aku Farid bertanggung jawab dalam bidang teknis Rongsokin dan menjaga keberlangsungan teknis Aplikasi.'
 ];
 
 class CeritaKami extends StatefulWidget {
@@ -95,34 +95,39 @@ class _CeritaKamiState extends State<CeritaKami> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                padding: EdgeInsets.fromLTRB(25, 0, 25, 40),
                 decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      'Jual Beli Sampah sebagai Media Digitalisasi dan Society 5.0',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'assets/images/rongsokin_digitalisasi.png'),
-                          fit: BoxFit.cover,
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 50, top: 20),
+                          child: Text(
+                            'Jual Beli Sampah sebagai Media Digitalisasi dan Society 5.0',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ),
-                      ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/rongsokin_digitalisasi.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 20),
                     Text(
@@ -156,7 +161,7 @@ final List<Widget> imageSliders = index
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(flex: 2, child: Image.asset(imgList[item])),
-                  SizedBox(width: 15),
+                  SizedBox(width: 8),
                   Expanded(
                       flex: 3,
                       child: Column(
@@ -167,14 +172,14 @@ final List<Widget> imageSliders = index
                             nameList[item],
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 2),
                           Text(
                             chiefList[item],
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               fontWeight: FontWeight.w500,
                               fontStyle: FontStyle.italic,
                             ),
@@ -184,7 +189,7 @@ final List<Widget> imageSliders = index
                             descriptionList[item],
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 11,
                               fontStyle: FontStyle.italic,
                             ),
                           )

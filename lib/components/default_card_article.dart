@@ -47,12 +47,18 @@ class DefaultCardArticle extends StatelessWidget {
                         decoration:
                             BoxDecoration(color: Colors.black.withOpacity(0.4)),
                       ),
-                      Positioned(
-                        bottom: 15,
-                        left: 15,
-                        child: Text(
-                          article.titleArticle,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, bottom: 15, right: 10),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            article.titleArticle,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
                       ),
                     ],

@@ -194,8 +194,8 @@ class Home extends StatelessWidget {
                         );
                       },
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        padding: EdgeInsets.only(
+                            left: 20, right: 15, top: 15, bottom: 15),
                         height: 110,
                         decoration: BoxDecoration(
                           color: kPrimaryColor,
@@ -210,7 +210,7 @@ class Home extends StatelessWidget {
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -228,7 +228,7 @@ class Home extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  SizedBox(width: 15),
                   // Comunity Button
                   Expanded(
                     child: InkWell(
@@ -252,7 +252,7 @@ class Home extends StatelessWidget {
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
