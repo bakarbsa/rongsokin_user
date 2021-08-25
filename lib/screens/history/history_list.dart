@@ -40,6 +40,7 @@ class HistoryList extends StatelessWidget {
                   .collection("requests")
                   .where("userId", isEqualTo: user!.uid)
                   .where("dibatalkan", isEqualTo: false)
+                  .orderBy('documentId', descending: true)
                   .snapshots(),
                 builder: (context,  AsyncSnapshot<QuerySnapshot>snapshot) {
                   if(snapshot.hasData) {

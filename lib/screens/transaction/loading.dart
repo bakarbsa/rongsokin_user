@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
 import 'package:rongsokin_user/screens/transaction/confirmation.dart';
+import 'package:rongsokin_user/screens/transaction/waiting_pengepul.dart';
 import 'package:rongsokin_user/services/database.dart';
 
 class Loading extends StatelessWidget {
@@ -63,10 +64,13 @@ class Loading extends StatelessWidget {
               WidgetsBinding.instance!.addPostFrameCallback(
                 (_) => Navigator.pushReplacement(context,
                   MaterialPageRoute(
-                    builder: (context) => Confirmation(
+                    builder: (context) => WaitingPengepul(
                       documentId: documentId,
-                      userPengepulId: (snapshot.data as dynamic)["userPengepulId"],
                     ),
+                    // builder: (context) => Confirmation(
+                    //   documentId: documentId,
+                    //   userPengepulId: (snapshot.data as dynamic)["userPengepulId"],
+                    // ),
                   ),
                 ),
               );

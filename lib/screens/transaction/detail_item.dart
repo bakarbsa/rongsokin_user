@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rongsokin_user/components/default_alert_dialog.dart';
+import 'package:rongsokin_user/components/default_loading_screen.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/models/items_model.dart';
 import 'package:intl/intl.dart';
@@ -149,21 +150,18 @@ class _DetailItemState extends State<DetailItem> {
                   if (checkNullPrice == false &&
                       checkNullPhoto == false &&
                       checkNullDesc == false) {
-                    print(listBarang);
                     dynamic result =
                         await _auth.createRequest(listBarang, address, total);
                     if (result == null) {
                       print('error');
                     } else {
                       await Future.delayed(Duration(seconds: 1))
-                          .then((value) => {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (_) {
-                                  return Loading(
-                                    documentId: result,
-                                  );
-                                }))
-                              });
+                        .then((value) => {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (_) {
+                            return DefaultLoading(documentId: result);
+                          }))
+                        });
                     }
                   }
                 },
@@ -290,7 +288,6 @@ class _ItemContainerState extends State<ItemContainer>
 
   Future pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
-
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
@@ -499,6 +496,7 @@ class _ItemContainerState extends State<ItemContainer>
                                             'fotoBarang': await pickImage(
                                                 ImageSource.camera)
                                           };
+                                          print(imageFile);
                                           Navigator.pop(context);
                                         },
                                         child: Container(
@@ -533,6 +531,7 @@ class _ItemContainerState extends State<ItemContainer>
                                             'fotoBarang': await pickImage(
                                                 ImageSource.gallery)
                                           };
+                                          print(imageFile);
                                           Navigator.pop(context);
                                         },
                                         child: Container(

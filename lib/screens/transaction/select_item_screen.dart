@@ -87,7 +87,6 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
       _isChecked[key] = false;
     }
     selectedItems.clear();
-    print(selectedItems);
     super.initState();
   }
 
