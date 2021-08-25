@@ -133,10 +133,10 @@ class _ProfileState extends State<Profile> {
                                     alertMessage: "Yakin ingin keluar ?",
                                     press: () async {
                                       await _auth.signOut();
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(builder: (_) {
-                                        return SignIn();
-                                      }));
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) => SignIn()),
+                                          (Route<dynamic> route) => false);
                                     });
                               });
                         },
