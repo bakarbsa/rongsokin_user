@@ -156,14 +156,14 @@ class _DetailItemState extends State<DetailItem> {
                       print('error');
                     } else {
                       await Future.delayed(Duration(seconds: 1))
-                      .then((value) => {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (_) {
-                          return Loading(
-                            documentId: result,
-                          );
-                        }))
-                      });
+                          .then((value) => {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (_) {
+                                  return Loading(
+                                    documentId: result,
+                                  );
+                                }))
+                              });
                     }
                   }
                 },
@@ -221,7 +221,13 @@ class _DetailItemState extends State<DetailItem> {
                   address = value;
                 },
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 5),
+              Text('* Jangan lupa upload foto ya!',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic)),
+              SizedBox(height: 5),
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -479,67 +485,71 @@ class _ItemContainerState extends State<ItemContainer>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        listBarang[widget.index] = {
-                                          'kategori':
-                                              getCategory(widget.itemName),
-                                          'namaBarang': widget.itemName,
-                                          'deskripsi': description,
-                                          'harga': price * weight,
-                                          'hargaPerItem': price,
-                                          'berat': weight,
-                                          'fotoBarang': await pickImage(
-                                              ImageSource.camera)
-                                        };
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: 150,
-                                        padding: EdgeInsets.only(
-                                            top: 20.0, bottom: 20.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(15.0),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          listBarang[widget.index] = {
+                                            'kategori':
+                                                getCategory(widget.itemName),
+                                            'namaBarang': widget.itemName,
+                                            'deskripsi': description,
+                                            'harga': price * weight,
+                                            'hargaPerItem': price,
+                                            'berat': weight,
+                                            'fotoBarang': await pickImage(
+                                                ImageSource.camera)
+                                          };
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 20.0, bottom: 20.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(15.0),
+                                            ),
                                           ),
-                                        ),
-                                        child: Text(
-                                          "Camera",
-                                          style: TextStyle(color: Colors.black),
-                                          textAlign: TextAlign.center,
+                                          child: Text(
+                                            "Camera",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    InkWell(
-                                      onTap: () async {
-                                        listBarang[widget.index] = {
-                                          'kategori':
-                                              getCategory(widget.itemName),
-                                          'namaBarang': widget.itemName,
-                                          'deskripsi': description,
-                                          'harga': price * weight,
-                                          'hargaPerItem': price,
-                                          'berat': weight,
-                                          'fotoBarang': await pickImage(
-                                              ImageSource.gallery)
-                                        };
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: 150,
-                                        padding: EdgeInsets.only(
-                                            top: 20.0, bottom: 20.0),
-                                        decoration: BoxDecoration(
-                                          color: kPrimaryColor,
-                                          borderRadius: BorderRadius.only(
-                                              bottomRight:
-                                                  Radius.circular(15.0)),
-                                        ),
-                                        child: Text(
-                                          "Gallery",
-                                          style: TextStyle(color: Colors.white),
-                                          textAlign: TextAlign.center,
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          listBarang[widget.index] = {
+                                            'kategori':
+                                                getCategory(widget.itemName),
+                                            'namaBarang': widget.itemName,
+                                            'deskripsi': description,
+                                            'harga': price * weight,
+                                            'hargaPerItem': price,
+                                            'berat': weight,
+                                            'fotoBarang': await pickImage(
+                                                ImageSource.gallery)
+                                          };
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 20.0, bottom: 20.0),
+                                          decoration: BoxDecoration(
+                                            color: kPrimaryColor,
+                                            borderRadius: BorderRadius.only(
+                                                bottomRight:
+                                                    Radius.circular(15.0)),
+                                          ),
+                                          child: Text(
+                                            "Gallery",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
                                         ),
                                       ),
                                     ),

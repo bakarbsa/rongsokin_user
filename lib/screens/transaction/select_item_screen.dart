@@ -62,23 +62,23 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
   List<String> selectedItems = [];
   Future<bool> _onBackPressed() async {
     return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ShowAlertDialog(
             context: context,
-            alertMessage:
-                "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
-            press: () async {
-              for (String key in _isChecked.keys) {
-                _isChecked[key] = false;
-              }
-              Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (_) {
-                return Home();
-              }));
-            });
-      }) ??
-    false;
+            builder: (BuildContext context) {
+              return ShowAlertDialog(
+                  context: context,
+                  alertMessage:
+                      "Yakin untuk kembali ? \nData yang telah anda \nmasukkan akan hilang",
+                  press: () async {
+                    for (String key in _isChecked.keys) {
+                      _isChecked[key] = false;
+                    }
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (_) {
+                      return Home();
+                    }));
+                  });
+            }) ??
+        false;
   }
 
   @override
@@ -139,13 +139,11 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
             if (selectedItems.length != 0) {
               print(selectedItems);
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailItem(
-                    selectedItems: this.selectedItems,
-                  )
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailItem(
+                            selectedItems: this.selectedItems,
+                          )));
             }
           },
           child: Container(
@@ -219,7 +217,7 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                   _isExpanded[0]
                       ? CheckBoxCategory(categoryKey: elektronikList[i])
                       : SizedBox.shrink(),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
 
                 // DROPDOWN PLASTIK
                 Card(
@@ -259,7 +257,7 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                   _isExpanded[1]
                       ? CheckBoxCategory(categoryKey: plastikList[i])
                       : SizedBox.shrink(),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
 
                 // DROPDOWN KERTAS
                 Card(
@@ -299,7 +297,7 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                   _isExpanded[2]
                       ? CheckBoxCategory(categoryKey: kertasList[i])
                       : SizedBox.shrink(),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
 
                 // DROPDOWN KACA
                 Card(
@@ -339,7 +337,7 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                   _isExpanded[3]
                       ? CheckBoxCategory(categoryKey: kacaList[i])
                       : SizedBox.shrink(),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
 
                 // DROPDOWN LOGAM
                 Card(
@@ -379,7 +377,7 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                   _isExpanded[4]
                       ? CheckBoxCategory(categoryKey: logamList[i])
                       : SizedBox.shrink(),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
 
                 // DROPDOWN KAIN
                 Card(
@@ -419,7 +417,7 @@ class _SelectItemScreenState extends State<SelectItemScreen> {
                   _isExpanded[5]
                       ? CheckBoxCategory(categoryKey: kainList[i])
                       : SizedBox.shrink(),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
               ],
             ),
           ),

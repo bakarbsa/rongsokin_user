@@ -7,6 +7,7 @@ import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/screens/transaction/detail_item.dart';
 import 'package:rongsokin_user/screens/transaction/rating_screen.dart';
 import 'package:rongsokin_user/services/database.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
@@ -179,24 +180,32 @@ class _ConfirmationState extends State<Confirmation> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.phone,
-                                        color: Colors.white,
-                                        size: 26,
-                                      ),
-                                      SizedBox(width: 3),
-                                      Text(
-                                        (snapshot.data as dynamic)["phoneNumber"],
-                                        style: TextStyle(
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        launch(
+                                          'tel:${(snapshot.data as dynamic)["phoneNumber"]}');
+                                      });
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.phone,
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          size: 26,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(width: 3),
+                                        Text(
+                                          (snapshot.data as dynamic)["phoneNumber"],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),

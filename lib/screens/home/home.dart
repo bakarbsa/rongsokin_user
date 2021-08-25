@@ -533,8 +533,8 @@ class ListImage extends StatelessWidget {
       child: Container(
         width: 160,
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(assetImage)),
-          color: Colors.blue[100],
+          image:
+              DecorationImage(image: AssetImage(assetImage), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(20),
         ),
       ),

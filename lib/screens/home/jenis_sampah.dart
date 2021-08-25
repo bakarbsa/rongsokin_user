@@ -121,7 +121,7 @@ class ItemList extends StatelessWidget {
     else
       unit = 'Kg';
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
       child: Card(
         elevation: 6,
         child: ListTile(
