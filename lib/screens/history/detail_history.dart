@@ -20,6 +20,7 @@ class DetailHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(documentId);
     return Scaffold(
       appBar: DefaultAppBar(),
       bottomNavigationBar: DefaultNavBar(selectedMenu: MenuState.transaction),
@@ -32,7 +33,7 @@ class DetailHistory extends StatelessWidget {
             children: [
               // Detail User Text
               Text(
-                'DETAIL USER',
+                'DETAIL USER PENGEPUL',
                 style: TextStyle(
                   color: Color(0xFF163570),
                   fontSize: 18,
@@ -41,7 +42,9 @@ class DetailHistory extends StatelessWidget {
               ),
               SizedBox(height: 10),
               //Detail User Container
-              StreamBuilder(
+              userPengepulId == 'tidak ada pengepul' ? Center(
+                child: Text('Belum ada Pengepul yang mengambil \nkarena terjadi kesalaahan dalam pesanan ', textAlign: TextAlign.center,),
+              ) : StreamBuilder(
                 stream: FirebaseFirestore.instance
                   .collection('usersPengepul')
                   .doc(userPengepulId)

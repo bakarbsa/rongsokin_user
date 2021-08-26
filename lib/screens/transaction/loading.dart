@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rongsokin_user/screens/home/home.dart';
-import 'package:rongsokin_user/screens/transaction/confirmation.dart';
 import 'package:rongsokin_user/screens/transaction/waiting_pengepul.dart';
 import 'package:rongsokin_user/services/database.dart';
 
@@ -66,6 +65,7 @@ class Loading extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => WaitingPengepul(
                       documentId: documentId,
+                      userId: (snapshot.data as dynamic)["userId"],
                     ),
                     // builder: (context) => Confirmation(
                     //   documentId: documentId,

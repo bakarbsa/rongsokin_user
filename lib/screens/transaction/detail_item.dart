@@ -7,7 +7,6 @@ import 'package:rongsokin_user/components/default_loading_screen.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/models/items_model.dart';
 import 'package:intl/intl.dart';
-import 'package:rongsokin_user/screens/transaction/loading.dart';
 import 'package:rongsokin_user/screens/transaction/select_item_screen.dart';
 import 'package:rongsokin_user/services/auth.dart';
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/screens/transaction/loading.dart';
 
 class DefaultLoading extends StatefulWidget {
@@ -23,12 +24,15 @@ class _DefaultLoadingState extends State<DefaultLoading> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 30,
-              height: 30,
-              child: CircularProgressIndicator(),
+              width: 200,
+              child: Image.asset('assets/images/upload_berkas.png'),
             ),
             SizedBox(height: 20,),
-            Text('Menunggu Upload Data...'),
+            Text(
+              'Data Barangmu\nsedang di upload ya!',
+              textAlign: TextAlign.center,
+              style: kHeaderText,
+            ),
             StreamBuilder(
               stream: FirebaseFirestore.instance
                 .collection('requests')

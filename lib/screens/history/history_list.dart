@@ -7,6 +7,10 @@ import 'package:rongsokin_user/components/default_navBar.dart';
 import 'package:rongsokin_user/constant.dart';
 import 'package:rongsokin_user/enums.dart';
 import 'package:rongsokin_user/screens/history/detail_history.dart';
+import 'package:rongsokin_user/screens/transaction/confirmation.dart';
+import 'package:rongsokin_user/screens/transaction/waiting_pengepul.dart';
+
+var currency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
 class HistoryList extends StatelessWidget {
   const HistoryList({ Key? key }) : super(key: key);
@@ -69,19 +73,36 @@ class HistoryList extends StatelessWidget {
                           DocumentSnapshot docSnapshot = snapshot.data!.docs[index]; 
                           return InkWell(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                                return DetailHistory(
-                                  documentId: docSnapshot["documentId"],
-                                  userPengepulId: docSnapshot["userPengepulId"],
-                                  total: docSnapshot["total"]
-                                );
-                              }));
+                              if(docSnapshot["status"] == 'selesai') {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                                  return DetailHistory(
+                                    documentId: docSnapshot["documentId"],
+                                    userPengepulId: docSnapshot["userPengepulId"] == null ? 'tidak ada pengepul' : docSnapshot["userPengepulId"],
+                                    total: docSnapshot["total"]
+                                  );
+                                }));
+                              } else if(docSnapshot["status"] == 'diproses pengepul') {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                                  return WaitingPengepul(
+                                    documentId: docSnapshot["documentId"],
+                                    userId: docSnapshot["userId"],
+                                  );
+                                }));
+                              } else if(docSnapshot["status"] == 'dikonfirmasi pengepul') {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                                  return Confirmation(
+                                    documentId: docSnapshot["documentId"],
+                                    userPengepulId: docSnapshot["userPengepulId"],
+                                  );
+                                }));
+                              }
                             },
                             child: HistoryContent(
                               name: docSnapshot["namaUserPengepul"], 
                               address: docSnapshot["lokasi"], 
                               price: '${currency.format(docSnapshot["total"])}', 
-                              date: docSnapshot["tanggal"]
+                              date: docSnapshot["tanggal"],
+                              status : docSnapshot["status"]
                             )
                           );
                         },
@@ -104,12 +125,14 @@ class HistoryContent extends StatelessWidget {
   final String address;
   final String price;
   final Timestamp date;
+  final String status;
 
   HistoryContent({
     required this.name,
     required this.address,
     required this.price,
     required this.date,
+    required this.status,
   });
 
   String formattedDate (date) {      
@@ -136,7 +159,15 @@ class HistoryContent extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  name == '' ? Text(
+                    'Belum Menemukan Pengepul',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontFamily: 'Montserrat',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    )
+                  ) : Text(
                     name,
                     style: TextStyle(
                       color: Color(0xFF163570),
@@ -176,6 +207,26 @@ class HistoryContent extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       fontStyle: FontStyle.italic,
                     ),
+                  ),
+                  SizedBox(height: 3),
+                  status == 'selesai' ? Text(
+                    status,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.green
+                    ),
+                  ) : Text(
+                    status,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.blue
+                    )
                   ),
                 ],
               )

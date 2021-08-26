@@ -272,7 +272,8 @@ class _ConfirmationState extends State<Confirmation> {
                             deskripsi: (snapshot.data as dynamic)["listBarang"]
                                 [index]["deskripsi"],
                             harga: (snapshot.data as dynamic)["listBarang"]
-                                [index]["harga"],
+                                [index]["harga"] == null ? 0 : (snapshot.data as dynamic)["listBarang"]
+                                [index]["harga"] , 
                             berat: (snapshot.data as dynamic)["listBarang"]
                                 [index]["berat"],
                             fotoBarang: (snapshot.data as dynamic)["listBarang"]
